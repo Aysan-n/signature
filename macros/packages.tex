@@ -1,0 +1,40 @@
+\usepackage[utf8]{inputenc}
+
+% Remove inconsistent hyphenation - do not delete
+\usepackage[british]{babel}
+\tolerance=1
+\emergencystretch=\maxdimen
+\hyphenpenalty=10000
+\hbadness=10000
+
+% References
+\usepackage[dvipsnames]{xcolor}% Uncomment for eprint version
+\usepackage{float}% Uncomment for eprint version
+\usepackage[backref=page]{hyperref}% Uncomment for eprint version
+\renewcommand*{\backref}[1]{}
+\renewcommand*{\backrefalt}[4]{({\ifcase #1 Not cited.\or Cited on page~#2.\else Cited on pages~#2.\fi})}
+\hypersetup{colorlinks,linkcolor=MidnightBlue,citecolor=OliveGreen}% Uncomment for eprint version
+
+% Maths
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{braket}
+\usepackage[capitalise]{cleveref}
+% \usepackage[appendix=inline]{apxproof}% Uncomment for inline proofs
+\usepackage[bibliography=common]{apxproof}% Uncomment for moving proofs to appendix
+\usepackage{mathtools}
+\usepackage{stmaryrd}
+
+% Suppress cryptocode package errors
+\expandafter\def\csname ver@etex.sty\endcsname{}
+\usepackage[adversary,advantage,asymptotics,keys,lambda,landau,mm,operators,sets]{cryptocode}
+
+\usepackage{macros/nicodemus}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{xspace}
+
+\usepackage{tikz}

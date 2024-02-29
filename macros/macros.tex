@@ -1,0 +1,415 @@
+\usepackage{listings}
+
+
+\newcommand{\uniqueness}{\textbf{Uniqueness}}
+
+% PDF reviewing
+\newcommand{\?}[1]{\textcolor{red}{\small [\textbf{???:} #1]}}
+\newcommand{\TODO}[1]{\textcolor{red}{\small [\textbf{TODO:} #1]}}
+\newcommand{\phillip}[1]{\textcolor{red}{\small [\textbf{Phillip:} #1]}}
+\newcommand{\jonas}[1]{\textcolor{red}{\small [\textbf{Jonas:} #1]}}
+\newcommand{\eike}[1]{\textcolor{red}{\small [\textbf{Eike:} #1]}}
+
+\renewcommand{\pcadvantagename}{\mathrm{Adv}}
+
+%===Definitions===
+% All primitives and interfaces are defined with three (or four, if necessary) letters, with only the first letter
+% capitalised, unless it's an acronym, in which case all letters are capitalised. The primitive name is only prepended
+% to an interface if there is ambiguity with another defined primitive.
+\newcommand{\NIKE}{\mathsf{NIKE}}
+\newcommand{\Stp}{\mathsf{Stp}}
+\newcommand{\NIKEGen}{\mathsf{Gen}}
+\newcommand{\Sdk}{\mathsf{Sdk}}
+%\newcommand{\ID}{\texttt{ID}}
+\newcommand{\pms}{\mathsf{par}}
+\newcommand{\IDspace}{\mathcal{ID}}
+\newcommand{\NIKESHKspace}{\mathcal{SKS}}
+\newcommand{\NIKEshk}{k}
+\newcommand{\SimRegHonUsrO}{\texttt{SimRegHonUsr}}
+\newcommand{\SimRegCorUsrO}{\texttt{SimRegCorUsr}}
+\newcommand{\SimRevCorQueO}{\texttt{SimRevCorQue}}
+\newcommand{\SimTestQueO}{\texttt{SimTestQue}}
+
+% \newcommand{\RegHonUsrO}{\texttt{RegHonUsr}}
+% \newcommand{\RegCorUsrO}{\texttt{RegCorUsr}}
+\newcommand{\RevCorQueO}{\texttt{RevCorQue}}
+\newcommand{\TestQueO}{\texttt{TestQue}}
+\newcommand{\RevHonQueO}{Q_\texttt{RHQ}}
+% \newcommand{\RegHonUsrQ}{Q_\texttt{RHU}}
+% \newcommand{\RegCorUsrQ}{Q_\texttt{RCU}}
+\newcommand{\RevCorQueQ}{Q_\texttt{RCQ}}
+\newcommand{\TestQueQ}{Q_\texttt{TQ}}
+\newcommand{\RevHonQueQ}{q_\texttt{RHQ}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\K}{\mathcal{K}}
+\newcommand{\KKEM}{\mathcal{K}_\KEM}
+
+
+\newcommand{\hkrlight}{\textnormal{\textbf{HKR-CKS-l}}}
+\newcommand{\hkrlightA}{\advantage{\hkrlight}{\NIKE,\pms}[(\adv)]}
+\newcommand{\hkrlightG}[1]{\hkrlight_{\NIKE{#1},\pms{#1}}}
+
+\newcommand{\hkr}{\textnormal{\textbf{HKR-CKS}}}
+\newcommand{\hkrA}{\advantage{\hkr}{\NIKE,\pms}[(\adv)]}
+\newcommand{\hkrG}[1]{\hkr_{\NIKE{#1},\pms{#1}}}
+
+\newcommand{\ckslight}{\textnormal{\textbf{CKS-l}}}
+\newcommand{\ckslightA}{\advantage{\ckslight}{\NIKE,\pms}[(\adv)]}
+\newcommand{\ckslightG}{\ckslight_{\NIKE,\pms}}
+
+\newcommand{\cks}{\textnormal{\textbf{CKS}}}
+\newcommand{\cksA}{\advantage{(n,\RevCorQueQ,\TestQueQ)\pcmathhyphen\cks}{\NIKE,\pms}[(\adv)]}
+\newcommand{\cksG}{(n,\RevCorQueQ,\TestQueQ)\pcmathhyphen\cks_{\NIKE,\pms}(\adv)}
+
+
+\newcommand{\KEM}{\mathsf{KEM}}
+\newcommand{\ID}{\mathsf{ID}}
+\newcommand{\KEMGen}{\mathsf{Gen}}
+\newcommand{\IDGen}{\mathsf{IGen}}
+
+\newcommand{\IDP}{\mathsf{P}}
+
+
+
+\newcommand{\IDV}{\mathsf{V}}
+\newcommand{\IDAltV}{\tilde{\IDV}}
+\newcommand{\ChSet}{\mathsf{ChSet}}
+
+\newcommand{\KEMEnc}{\mathsf{Enc}}
+\newcommand{\KEMDec}{\mathsf{Dec}}
+\newcommand{\kct}{kct}
+\renewcommand{\kk}{kk}
+\newcommand{\KEMEncO}{\texttt{Enc}}
+\newcommand{\KEMDecO}{\texttt{Dec}}
+\newcommand{\KEMChlO}{\texttt{Ch}}
+\newcommand{\KEMEncQ}{Q_{\KEMEncO}}
+\newcommand{\KEMDecQ}{Q_{\KEMDecO}}
+\newcommand{\KEMChlQ}{Q_{\KEMChlO}}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\EKEM}{\mathcal{E}_\KEM}
+\newcommand{\kemcca}{\textnormal{\textbf{IND-CCA}}}
+\newcommand{\kemccaA}{\advantage{\kemcca}{\KEM}[(\adv)]}
+\newcommand{\kemccaG}{\kemcca_{\KEM}(\adv)}
+\newcommand{\kempr}{\textnormal{\textbf{PR-CCA}}}
+\newcommand{\kemprA}{\advantage{\kempr}{\KEM}[(\adv)]}
+\newcommand{\kemprG}{\kempr_{\KEM}(\adv)}
+
+\newcommand{\xsoundness}{\imp \hyph \mathsf{ALT}}
+
+
+\newcommand{\AKEM}{\mathsf{AKEM}}
+\newcommand{\AKEMGen}{\mathsf{Gen}}
+\newcommand{\AKEMEnc}{\mathsf{Enc}}
+\newcommand{\AKEMDec}{\mathsf{Dec}}
+\newcommand{\AKEMEncO}{\texttt{Encps}}
+\newcommand{\AKEMDecO}{\texttt{Decps}}
+\newcommand{\AKEMChlO}{\texttt{Chall}}
+\newcommand{\AKEMCSKO}{\texttt{CorSK}}
+\newcommand{\AKEMEncQ}{Q_{\texttt{Enc}}}
+\newcommand{\AKEMDecQ}{Q_{\texttt{Dec}}}
+\newcommand{\AKEMChlQ}{Q_{\texttt{Chl}}}
+\newcommand{\AKEMCSKQ}{Q_{\texttt{CSK}}}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\akemcca}{\textnormal{\textbf{Ins-CCA}}}
+\newcommand{\akemccaA}{\advantage{(n,\AKEMEncQ,\AKEMDecQ,\AKEMCSKQ,\AKEMChlQ)\pcmathhyphen\akemcca}{\AKEM}[(\adv)]}
+\newcommand{\akemccaG}{\akemcca_{\AKEM}(\adv)}
+
+\newcommand{\akeminsaut}{\textnormal{\textbf{Ins-Aut}}}
+\newcommand{\akeminsautA}{\advantage{(n,\AKEMEncQ,\AKEMDecQ,\AKEMChlQ)\pcmathhyphen\akeminsaut}{\AKEM}[(\adv)]}
+\newcommand{\akeminsautG}{\akeminsaut_{\AKEM}(\adv)}
+
+\newcommand{\akemoutaut}{\textnormal{\textbf{Out-Aut}}}
+\newcommand{\akemoutautA}{\advantage{(n,\AKEMEncQ,\AKEMChlQ)\pcmathhyphen\akemoutaut}{\AKEM}[(\adv)]}
+\newcommand{\akemoutautG}{\akemoutaut_{\AKEM}(\adv)}
+
+\newcommand{\akemden}[1]{\textnormal{\textbf{#1-Den}}}
+\newcommand{\akemdenA}[1]{\advantage{\akemden{#1}}{\AKEM}[(\adv)]}
+\newcommand{\akemdenG}[1]{\akemden{#1}_{\AKEM}}
+
+\newcommand{\deniableAKEM}[1]{\textnormal{\textbf{#1-Den}}}
+\newcommand{\deniableAKEMG}[1]{(n,\AKEMChlQ, \AKEMEncQ, \AKEMDecQ)\pcmathhyphen\deniableAKEM{#1}_{\AKEM, \Sim}(\adv)}
+\newcommand{\deniableAKEMA}[1]{\advantage{(n,\AKEMChlQ, \AKEMEncQ, \AKEMDecQ)\pcmathhyphen\deniableAKEM{#1}}{\AKEM, \Sim}[(\adv)]}
+
+
+\renewcommand{\sk}{sk}
+\renewcommand{\c}{C}
+\renewcommand{\st}{St}
+\newcommand{\s}{s}
+\renewcommand{\r}{R}
+\newcommand{\com}{Com}
+\renewcommand{\pk}{pk}
+\newcommand{\IDpk}{pk_{\ID}}
+\newcommand{\ksk}{ksk}
+\newcommand{\kpk}{kpk}
+\newcommand{\ssk}{ssk}
+\newcommand{\spk}{spk}
+\newcommand{\ct}{c}
+\newcommand{\shk}{k}
+\newcommand{\SHKspace}{\mathcal{K}}
+\newcommand{\PKspace}{\mathcal{PK}}
+\newcommand{\SKspace}{\mathcal{SK}}
+
+\newcommand{\Sig}{\mathsf{Sig}}
+\newcommand{\SigGen}{\mathsf{Gen}}
+\newcommand{\SigSgn}{\mathsf{Sgn}}
+\newcommand{\SigVer}{\mathsf{Ver}}
+\newcommand{\SigSgnO}{\texttt{Sgn}}
+\newcommand{\SigSgnQ}{Q_\RSigSgnO}
+
+
+\newcommand{\otsuf}{\textbf{OT}\hyph \suf}
+\newcommand{\otsufG}{\otsuf_{\Sig}(\adv)}
+\newcommand{\otsufA}{\advantage{\otsuf}{\Sig}[(\adv)]}
+
+
+\newcommand{\OTSig}{\mathsf{OTSig}}
+\newcommand{\RSig}{\mathsf{RSig}}
+\newcommand{\RSigGen}{\mathsf{Gen}}
+\newcommand{\RSigSgn}{\mathsf{Sgn}}
+\newcommand{\RSigVer}{\mathsf{Ver}}
+\newcommand{\RSigRec}{\mathsf{Rec}}
+\newcommand{\RSigVerO}{\texttt{Ver}}
+\newcommand{\RSigVerQ}{Q_\RSigVerO}
+\newcommand{\RSigSgnO}{\texttt{Sgn}}
+\newcommand{\RSigSgnQ}{Q_\RSigSgnO}
+\newcommand{\RSigChlO}{\texttt{Chl}}
+\newcommand{\RSigChlQ}{Q_\RSigChlO}
+\newcommand{\Rspace}{\mathcal{R}}
+\newcommand{\Mspace}{\mathcal{M}}
+
+\newcommand{\ufRSig}{(n, \RSigSgnQ) \pcmathhyphen \textnormal{\textbf{UF}}}
+\newcommand{\ufRSigG}{\ufRSig_{\RSig}(\adv)}
+\newcommand{\ufRSigA}{\advantage{\ufRSig}{\RSig}[(\adv)]}
+\newcommand{\sufRSig}{(n, \RSigSgnQ) \pcmathhyphen \textnormal{\textbf{SUF}}}
+\newcommand{\sufRSigG}{\sufRSig_{\RSig}(\adv)}
+\newcommand{\sufRSigA}{\advantage{\sufRSig}{\RSig}[(\adv)]}
+
+\newcommand{\anoRSig}{\textnormal{\textbf{Ano}}}
+\newcommand{\anoRSigG}{\anoRSig_{\RSig}(\adv)}
+\newcommand{\anoRSigA}{\advantage{(n, \RSigSgnQ)\pcmathhyphen\anoRSig}{\RSig}[(\adv)]}
+
+\newcommand{\anomcRSig}{\textnormal{\textbf{MC-Ano}}}
+\newcommand{\anomcRSigG}{\anomcRSig_{\RSig}(\adv)}
+\newcommand{\anomcRSigA}{\advantage{(n, \RSigSgnQ, \RSigChlQ)\pcmathhyphen\anomcRSig}{\RSig}[(\adv)]}
+
+
+\newcommand{\SRSig}{\mathsf{S \hyph \RSig[\RSig, \Sig]}}
+\newcommand{\SRSigPlain}{\mathsf{S \hyph \RSig}}
+\newcommand{\m}{m}
+\newcommand{\random}{r}
+\newcommand{\List}{\ensuremath{L}}
+
+
+
+\newcommand{\Auth}{\mathsf{Auth}}
+\newcommand{\AuthGen}{\mathsf{Gen}}
+\newcommand{\SenAut}{\mathsf{SenAut}}
+\newcommand{\RecAut}{\mathsf{RecAut}}
+
+\newcommand{\tagimp}{\tau_{imp}}
+\newcommand{\tagexp}{\tau_{exp}}
+\newcommand{\simexp}{Sim?}
+\newcommand{\TAGspace}{\mathcal{T}}
+\newcommand{\Sim}{\mathsf{Sim}}
+\newcommand{\aux}{aux}
+\newcommand{\ask}{ask}
+\newcommand{\apk}{apk}
+\newcommand{\AuthChlO}{\texttt{Chall}}
+\newcommand{\AuthChlQ}{Q_\AuthChlO}
+\newcommand{\SenAutO}{\texttt{SenAut}}
+\newcommand{\SenAutQ}{Q_\texttt{SenAut}}
+
+\newcommand{\RecAutO}{\texttt{RecAut}}
+\newcommand{\RecAutQ}{Q_\texttt{RecAut}}
+
+\newcommand{\RevO}{\texttt{Rev}}
+\newcommand{\RevQ}{Q_\texttt{Rev}}
+\newcommand{\authauth}{\textnormal{\textbf{Auth}}}
+\newcommand{\authauthA}{\advantage{(n,\SenAutQ,\RecAutQ)\pcmathhyphen\authauth}{\Auth}[(\adv)]}
+\newcommand{\authauthG}{(n,\SenAutQ,\RecAutQ)\pcmathhyphen\authauth_{\Auth}(\adv)}
+% \newcommand{\CollProbAuth}{\mathcal{CP}_\Auth}
+\newcommand{\CollProbAuth}{\eta}
+
+
+\newcommand{\deniableAuth}[1]{\textnormal{\textbf{#1-Den}}}
+\newcommand{\deniableAuthG}[1]{(n,\AuthChlQ, \SenAutQ, \RecAutQ)\pcmathhyphen\deniableAuth{#1}_{\Auth, \Sim}(\adv)}
+\newcommand{\deniableAuthA}[1]{\advantage{(n,\AuthChlQ, \SenAutQ, \RecAutQ)\pcmathhyphen\deniableAuth{#1}}{\Auth, \Sim}[(\adv)]}
+
+
+
+\newcommand{\ufAuth}{(n, q) \pcmathhyphen \textnormal{\textbf{UF}}}
+\newcommand{\ufAuthG}{\ufAuth_{\Auth}}
+\newcommand{\ufAuthA}{\advantage{\ufAuth}{\Auth}[(\adv)]}
+
+\newcommand{\PRF}{\textnormal{\textbf{PRF}}}
+\newcommand{\PRFO}{\texttt{Eval}}
+\newcommand{\PRFOQ}{Q_\texttt{Eval}}
+
+\DeclareMathOperator{\Ex}{\mathbb{E}}
+% \DeclareMathOperator{\Pr}{\mathbb{P}}
+
+
+%===General Definitions===
+\newcommand{\Hash}{\mathsf{H}}
+\newcommand{\bits}{\{0, 1\}}
+\newcommand{\bool}[1]{\llbracket #1\rrbracket}
+\newcommand{\cnt}{\ell}
+\newcommand{\true}{\textbf{true}}
+\newcommand{\false}{\textbf{false}}
+\newcommand{\flag}{\texttt{flag}}
+\newcommand{\abort}{\mathsf{abort}}
+\newcommand{\imp}{\mathsf{IMP}}
+\newcommand{\guess}{\mathsf{guess}}
+\newcommand{\BAD}{\texttt{BAD}}
+\newcommand{\hyph}{\pcmathhyphen}
+%\newcommand{\emptystring}{\epsilon}
+
+
+%===Constructions===
+\newcommand{\AKEMNIKE}{\AKEM[\KEM, \AuthNIKE, \Hash]}
+\newcommand{\AKEMRSig}{\AKEM[\KEM, \RSig, \Hash]}
+\newcommand{\AKEMAuth}{\AKEM[\KEM,\Auth,\Hash]}
+\newcommand{\AuthNIKE}{\Auth[\NIKE,\Hash]}
+\newcommand{\AuthRSig}{\Auth[\RSig]}
+
+
+
+
+%===Security Games===
+\newcommand{\xxx}{\textbf{xxx}}
+\newcommand{\yyy}{\textbf{yyy}}
+\newcommand{\zzz}{\textbf{z}}
+\newcommand{\ind}{\textbf{IND}}
+\newcommand{\uf}{\textbf{UF}}
+\newcommand{\suf}{\textbf{SUF}}
+\renewcommand{\exp}{\textbf{EXP}}
+\newcommand{\ins}{\textbf{I}}
+\newcommand{\out}{\textbf{O}}
+
+\newcommand{\deniability}{\textnormal{\textbf{Den}}}
+\newcommand{\deniabilityG}{(n,\AKEMChlQ, \AKEMEncQ, \AKEMDecQ)\pcmathhyphen\deniability_{\AKEM, \Sim}(\adv)}
+\newcommand{\deniabilityA}{\advantage{(n,\AKEMChlQ, \AKEMEncQ, \AKEMDecQ)\pcmathhyphen\deniability}{\AKEM, \Sim}[(\adv)]}
+
+\newcommand{\eo}{\textnormal{\textbf{EO}}}
+\newcommand{\eoG}{\eo_{\RSig}}
+\newcommand{\eoA}{\advantage{\eo}{\RSig}[(\adv)]}
+
+
+
+\newcommand{\RSignO}{\texttt{RSgn}}
+
+
+\newcommand{\HashQ}{Q_\H}
+
+\let\oldexists\exists
+\renewcommand\exists{\oldexists\;}
+\let\oldforall\forall
+\renewcommand\forall{\oldforall\;}
+
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\R}{\mathcal{R}}
+\newcommand{\Q}{\mathcal{Q}}
+\newcommand{\N}{\mathcal{N}}
+% \newcommand{\Rp}{\R_p}
+% \newcommand{\Rq}{\R_q}
+% \newcommand{\cbd}{\texttt{Cbd}}
+% \newcommand{\rec}{\texttt{Rec}}
+% \newcommand{\rnd}{\texttt{Rnd}}
+
+\newcommand{\getsr}{\overset{\$}{\gets}}
+
+% \newcommand{\pol}[1]{\bm{#1}}
+% \newcommand{\polmat}[1]{\bm{#1}}
+% \newcommand{\mat}[1]{\bm{\mathrm{#1}}}
+% \newcommand{\polvec}[1]{\vec{\bm{#1}}}
+
+
+% \newcommand{\mat}[1]{\mathbf{#1}}
+% \newcommand{\pol}[1]{\mathbf{#1}}
+% \newcommand{\polmat}[1]{\bm{#1}}
+% \newcommand{\polvec}[1]{\bm{#1}}
+
+\newcommand{\mat}[1]{\bm{#1}}
+\newcommand{\pol}[1]{\bm{#1}}
+\newcommand{\polmat}[1]{\mathbf{#1}}
+\newcommand{\polvec}[1]{\mathbf{#1}}
+
+
+
+
+
+\newcommand{\ntruPars}{\R,\D}
+\newcommand{\ntruText}{\textnormal{\textbf{NTRU}}}
+\newcommand{\ntru}[1][]{\ifthenelse{\equal{#1}{}}{\textnormal{\ntruText}_{\ntruPars}}{\textnormal{\ntruText}_{#1}}}
+\newcommand{\ntruG}[1]{\ntruText_{\ntruPars}^{#1}}
+\newcommand{\ntruA}[1][]{\ifthenelse{\equal{#1}{}}{\advantage{\ntruText}{\ntruPars}[(\adv)]}{\advantage{\ntruText}{#1}[]}}
+
+
+%===Lattices===
+\newcommand{\lattice}{\mathbf{\Lambda}}
+\newcommand{\stdev}{\sigma}
+
+%===Norms===
+\renewcommand{\norm}[1]{\left\lVert{#1}\right\rVert}
+\newcommand{\twonorm}[1]{\left\lVert{#1}\right\rVert_2}
+\newcommand{\infnorm}[1]{\left\lVert{#1}\right\rVert_\infty}
+\newcommand{\inprod}[2]{\langle #1 , #2 \rangle}
+
+% \newcommand{\E}{\mathop{\mathbb{E}}}
+% \DeclareMathOperator{\E}{\mathop{\mathbb{E}}}
+
+
+\renewcommand{\pcadvantagesuperstyle}[1]{\mathrm{#1}}
+\renewcommand{\adv}{\mathcal{A}}
+\renewcommand{\bdv}{\mathcal{B}}
+\renewcommand{\cdv}{\mathcal{C}}
+\renewcommand{\sim}{\mathsf{S}}
+\newcommand{\Zp}{\ZZ_p}
+\newcommand{\Zq}{\ZZ_q}
+\renewcommand{\H}{\mathsf{H}}
+\newcommand{\F}{\mathsf{F}}
+\newcommand{\G}{\mathsf{G}}
+\newcommand{\qeqq}{\stackrel{?}{=}}
+
+\renewcommand{\pcrepeat}{\highlightkeyword{repeat}}
+
+\renewcommand{\sample}{
+    \mathrel{
+        \vbox{
+            \offinterlineskip\ialign{
+                \hfil##\hfil\cr\hspace{0.1em}
+                $\scriptscriptstyle\$$\cr$\leftarrow$\cr
+            }
+        }
+    }
+}
+
+%===Game Env===
+\createprocedureblock{procb}{}{}{}{linenumbering}
+\pcsethstackargs{space=1em}
+\pcsetvstackargs{center,space=3em}
+\pcsetargs{headlinecmd}
+\renewcommand{\pclnstyle}[1]{\text{\scriptsize\texttt{\textcolor{gray}{#1}}}}
+\renewcommand{\pclnseparator}{}
+
+%===Claim Proof Environment===
+\newcommand*{\claimproofname}{Proof of Claim}
+\newenvironment{claimproof}[1][\claimproofname]{
+    \begin{proof}[#1]
+        \renewcommand*{\qedsymbol}{$\square$}}{
+    \end{proof}
+}
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+
+\newtheorem{thm}{Theorem}
+\newcounter{claimcounter}[thm]
+\renewenvironment{claim}{\stepcounter{claimcounter}{Claim \theclaimcounter:}}{}
+% \renewenvironment{claim}{$Claim:$}{}
+% \renewtheorem*{claim}{Claim}
+
+
+\newtheoremrep{applemma}[theorem]{Lemma}
+\newtheorem{theorem*}{Game}
+\newtheoremrep{apptheorem}[theorem]{Theorem}
+\renewcommand{\appendixsectionformat}[2]{Appendix for Section~#1\ (#2)}
