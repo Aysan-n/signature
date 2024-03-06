@@ -1,0 +1,84 @@
+\section{Instantiation from the q-SDH Assumption}
+In the following let $\pms \coloneqq (p,\G) $ be a set of system parameters, where 
+$\G $ is a cyclic group of prime order $p$.
+
+\begin{definition}[$q$-SDH Assumption]
+We say an adversary $\adv$ breaks the $q$-strong Diffie Hellman ($q$-SDH)assumption if it's running time is bounded by $t$ and
+$$\Pr[(s,g^{\frac{1}{s+x}}) \sample \adv(g,g^x,...,g^{x^q})] \geq \epsilon,$$
+where 
+$g \sample \G$ and $x \sample \mathbb{Z}_p^*$.
+We require that the $q$-SDH assumption holds meaning that no adversary can $(t, \epsilon)$ break the $q$-SDH problem for a polynomial $t$ and a non-negligible $\epsilon$.
+\end{definition}
+
+\begin{figure}[htb!]
+    \centering
+    \nicoresetlinenr
+    \fbox{
+        \begin{minipage}[t]{0.5\textwidth}
+            \underline{$\IDGen(\pms)$:}
+            \begin{nicodemus}
+            	\item $g \sample \G$
+		\item $x \sample \mathbb{Z}_p$
+                \item $\sk \coloneqq (g,x)$
+                \item $X = g^x$
+                \item $\pk \coloneqq (g,X)$
+                \item $\ChSet \coloneqq \mathbb{Z}_p$
+                \item $\pcreturn (\sk,\pk)$
+            \end{nicodemus}
+            \underline{$\IDV(\pk,\tau,\com,\c,\s)$}:
+            \begin{nicodemus}
+            	\item $\pcparse \com = (\hat{g},R,\hat{R})$
+      		\item \pcif $R = g^\s \cdot(X\cdot g^{\tau})^{-\c} \land$
+		\item$ \quad \hat{R} = \hat{g}^\s \cdot (g\cdot \hat{g}^{-\tau} )^\c$
+                 \item \quad \pcthen \pcreturn 1
+                 \item \pcelse \pcreturn 0
+            \end{nicodemus}
+            
+
+            
+        \end{minipage}
+        \begin{minipage}[t]{0.5\textwidth}
+            \underline{$\IDP_1(\sk,\tau):$}
+            \begin{nicodemus}
+                \item $\st \coloneqq (\tau,r \sample \mathbb{Z}_p)$
+                \item $\hat{g} \coloneqq g^{\frac{1}{x+\tau}}$
+                \item $R \coloneqq g^r$
+                \item $\hat{R} \coloneqq \hat{g}^r$
+                \item $\com := (\hat{g},R,\hat{R})$
+                \item $\pcreturn (\com,\st)$
+            \end{nicodemus}
+            
+              \underline{$\IDP_2(\sk,\st,\c):$}
+            \begin{nicodemus}
+            	\item $\pcparse \st = (\tau,r)$
+		\item $\pcparse \sk = x$
+                \item $\pcreturn \s =\c\cdot(x+\tau) + r \mod p$
+            \end{nicodemus}
+                        \underline{$\IDAltV(\sk,\tau,\com, \c,\s)$}:
+            \begin{nicodemus}
+                \item \pcparse $\com = (\hat{g},R,\hat{R})$
+                \item \pcparse $\sk = x$
+                \item \pcif $\hat{g} = g^{\frac{1}{x+\tau}}$ 
+                \item \quad \pcthen \pcreturn 1
+                \item \pcelse \pcreturn 0
+            \end{nicodemus}
+        \end{minipage}
+    }
+    \caption{Instantiation 1}
+    \label{fig:prf-security}
+\end{figure}
+
+We describe the identification scheme  $\ID_{q-\text{SDH}} \coloneqq(\IDGen, \IDP=(\IDP_1,\IDP_2) ,\ChSet, \IDV)$ and it's alternative verification $\IDAltV$ as depicted in figure 4.
+
+\begin{theorem}
+Suppose that there exists a $(t, q, \epsilon)$-forger $\mathcal{F}$ breaking the $\imp^{\IDAltV}$ of the $\ID_{q-\text{SDH}}$ identification scheme. Then there exists an adversary $\adv$ that $(t',q,\epsilon')-$ breaks the $q$-SDH assumption with $t \approx t'$ and 
+$\epsilon' \geq ?.$
+\end{theorem}
+\begin{proof}
+The $q$-SDH adversary $\adv$ receives $g,g^x,...,g^{x^q}$ as inputs and simulates the $q$-SDH experiment as follows
+\subsection*{Key Generation:} The adversary $\adv$ first chooses random $\tau_1,...,\tau_q$ from $\mathbb{Z}_p$. Let $f$ be a univariate polynomial defined as 
+$f(X) = \prod_{i=1}^q (X+\tau_i)$. Expand $f$ and write $f(X) = \sum_{i=0}^q \alpha_i X^i$ where
+$\alpha_0,...,\alpha_q \in \mathbb{Z}_p$ are coefficients of the polynomial $f$. Adversary $\adv$ chooses a random $\theta \in \mathbb{Z}^*_p$, and computes
+$$g_1 \leftarrow \prod_{i=0}^q (g^{x^i})^{\theta\alpha_i}$$
+which essentially means $g_1 = g^{\theta f(x)}$.
+\end{proof}
