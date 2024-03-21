@@ -1,0 +1,101 @@
+\section{Identification Scheme}
+
+\begin{definition}[Canonical Tag-based Identification Scheme]
+A canonical tag-based  identification (tag-ID) scheme is defined as the probabilistic algotithms $\ID \coloneqq(\IDGen, \IDP, \IDV)$ where
+\begin{itemize}
+\item$\IDGen$ returns a public key and secret key $(\pk,\sk)$. We assume that $\pk$ defines the challenge set $\ChSet$ and tag space $\tgSet$.
+
+\item The prover algorithm $\IDP = (\IDP_1,\IDP_2)$ is split into two algorithms. $\IDP_1$ takes the secret key $\sk$ and a tag $\tau$ from the tag space $\mathsf{M}$ as the input and returns a commitment $\com$ and a state $\st$. $\IDP_2$ takes the secret key $\sk$, the state $\st$ and a challenge $\c$ as an input and returns a response $\s$. 
+
+\item The deterministic verifier algorithm $\IDV$ takes the public key $\pk$, the tag $\tau$, the commitment $\com$, the challenge $\c$ and the response $\s$ as an input and outputs a decision, 1 (acceptance) or 0 (rejection).
+\end{itemize}
+For correctness we require that for all $k \in \mathbb{N}$,
+$(\pk,\sk) \in \IDGen(1^k)$,
+all
+$(\com,\st) \in \IDP_1(\sk, \tau)$,
+all $\c \in \ChSet$ and all 
+$\s \in \IDP_2(\sk,\st,\c)$,
+we have
+$$ \IDV(\pk,\com,\c,\s) = 1.$$
+\begin{figure}[H]
+  \centering
+   \nicoresetlinenr
+\vspace{2em}
+ \fbox{
+ \pseudocode{%
+ \textbf{ Prover} \< \< \textbf{ Verifier}  \\[0.1\baselineskip][\hline]
+  \<\< \\[-0.5\baselineskip]
+(\com,\st) \sample \IDP_1(\sk,\tau)
+  \< \sendmessageright*{\tau,\com} \< \\[-2ex]
+  \<\< \c \sample \ChSet \\[-4ex]
+  \< \sendmessageleft*{\c} \< \\
+  \s \sample\IDP_2(\sk,\st,\c) 
+  \< \sendmessageright*{\s} \< \\[-2ex]
+   \<\< d \coloneqq \IDV(\pk,\com,\c,\s)
+  }
+  
+ }
+  \caption{Canonical Tag-based Identification Scheme}
+ \end{figure}
+
+\end{definition}
+
+
+
+\begin{definition}[Dual Tag-ID]
+A dual canonical tag based identification scheme (dual tag-id) is a identification scheme $\ID$, with an additional algorithm $\IDAltV$ called the alternative verification algorithm that takes the secret key $\sk$, the tag $\tau$, the commitment $\com$, the challenge $\c$ and the response $\s$ as an input and outputs a decision, 1 (acceptance) or 0 (rejection).
+\\
+For the correctness of this scheme in additional to the correctness defined before we require that for all $k \in \mathbb{N}$,
+$(\pk,\sk) \in \IDGen(1^k)$,
+all
+$(\com,\st) \in \IDP_1(\sk, \tau)$,
+all $\c \in \ChSet$ and all 
+$\s \in \IDP_2(\sk,\st,\c)$,
+we have
+$$ \IDAltV(\sk,\tau,\com,\c,\s) = 1.$$
+\end{definition}
+
+\begin{definition}[Alternative Impersonation]
+A canonical tag based identification scheme is said to be $(t,q,\epsilon)-\imp^{\IDAltV}$ secure, if for all adversary $\adv$ running in time at most $t$ we have
+$$\Pr[q\hyph\xsoundness^{\IDAltV}_{\ID}(\adv)]=1] \leq \epsilon.$$
+\end{definition}
+
+
+
+\begin{figure}[htb!]
+    \centering
+    \nicoresetlinenr
+    \fbox{
+        \begin{minipage}[t]{0.8\textwidth}
+            \underline{$\textbf{Game } q\hyph\xsoundness^{\IDAltV}_{\ID}(\adv)$}
+            \begin{nicodemus}
+            	\item $(\sk,\pk)\sample\IDGen$
+		\item $\Q \leftarrow \emptyset$
+                \item \pcfor $i \in [q]$
+                \item \quad $ \tau_i \sample \mathsf{M}$
+                \item \quad $(\com_i,\st_i)\sample\IDP_1(\sk,\tau_i)$
+                \item \quad $ \c_i \sample \ChSet $
+                \item \quad $\s_i \sample\IDP_2(\sk,\st_i,\c_i)$
+                \item \quad $\Q \leftarrow \Q \cup (\tau_i,\com_i,\c_i,\s_i) $
+                \item $(\tau^*, \com^*,\c^*,\s^*)\gets\adv(\pk,\Q)$
+                \item $\pcif \tau^* \notin \{\tau_1,...,\tau_q\} \land \IDAltV(\sk, \tau^*, \com^*,\c^*,\s^*) = 1$
+                \item $\pcthen \pcreturn 1$
+                \item $\pcelse \pcreturn 0$
+            \end{nicodemus}
+        \end{minipage}
+    }
+    \caption{}
+    \label{fig:x-soundess}
+\end{figure}
+
+
+
+
+\begin{definition}[$\uniqueness$]
+We say the identification scheme $\ID \coloneqq(\IDGen, \IDP ,\ChSet, \IDV)$ is
+unique if for every $(\sk,\pk)\in\IDGen$ and every $(\com,\st)\in\IDP_1(\sk,\tau)$,
+$$\big{|}\{\c \in \ChSet \mid \exists \s : \IDV(\pk,\com,\c,\s) = 1 \land \IDAltV(\sk, \com, \C,  \s) \neq 1 \}\big{|} = 1.$$
+This means there exist a (not necessarily polynomial time) function we call the uniqueness function such as $f$ that
+$$f(\pk,\com) = \c.$$
+\end{definition}
+

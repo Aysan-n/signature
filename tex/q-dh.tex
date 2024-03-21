@@ -1,0 +1,88 @@
+\section{Instantiation from the q-DH Assumption}
+We describe the identification scheme as in figure 5.
+In the following we will write $D(\tau)$ shorthand for 
+$\phfEval(\kappa,\tau)$ and $d(\tau)$ shorthand for the function computing
+$(a,b) \leftarrow \phfTE(\eta,\tau)$ and returning $ax+b$.
+\begin{figure}[htb!]
+    \centering
+    \nicoresetlinenr
+    \fbox{
+        \begin{minipage}[t]{0.5\textwidth}
+            \underline{$\IDGen(\pms)$:}
+            \begin{nicodemus}
+            	\item $g_1,g_2 \sample \G$
+		\item $x \sample \mathbb{Z}_p$
+                \item $X = g_2^x$
+                \item $(\kappa, \eta) \sample \phfTG(1^k,g_2,X)$
+                \item $\pk \coloneqq (g_1,g_2,\kappa)$
+                \item $\sk \coloneqq (\pk,x,\eta)$
+                \item $\ChSet \coloneqq \mathbb{Z}_p$
+                \item $\pcreturn (\sk,\pk)$
+            \end{nicodemus}
+            \underline{$\IDV(\pk,\tau,\com,\c,\s)$}:
+            \begin{nicodemus}
+            	\item $\pcparse \com = (\hat{g},R,\hat{R})$
+      		\item \pcif $R = g^\s \cdot(X\cdot g^{\tau})^{-\c} \land$
+		\item$ \quad \hat{R} = \hat{g}^\s \cdot (g\cdot \hat{g}^{-\tau} )^\c$
+                 \item \quad \pcthen \pcreturn 1
+                 \item \pcelse \pcreturn 0
+            \end{nicodemus}
+            
+
+            
+        \end{minipage}
+        \begin{minipage}[t]{0.5\textwidth}
+            \underline{$\IDP_1(\sk,\tau):$}
+            \begin{nicodemus}
+            	\item $r \sample \mathbb{Z}_p$
+                \item $\st \coloneqq (\tau,r )$
+                \item $\hat{g} \coloneqq g^{\frac{1}{d(\tau)}}$
+                \item $R \coloneqq g^r$
+                \item $\hat{R} \coloneqq \hat{g}^r$
+                \item $\com := (\hat{g},R,\hat{R})$
+                \item $\pcreturn (\com,\st)$
+            \end{nicodemus}
+            
+              \underline{$\IDP_2(\sk,\st,\c):$}
+            \begin{nicodemus}
+            	\item $\pcparse \st = (\tau,r)$
+		\item $\pcparse \sk = x$
+                \item $\pcreturn \s =\c\cdot d(\tau) + r \mod p$
+            \end{nicodemus}
+                        \underline{$\IDAltV(\sk,\tau,\com, \c,\s)$}:
+            \begin{nicodemus}
+                \item \pcparse $\com = (\hat{g},R,\hat{R})$
+                \item \pcparse $\sk = x$
+                \item \pcif $\hat{g} = g^{\frac{1}{x+\tau}}$ 
+                \item \quad \pcthen \pcreturn 1
+                \item \pcelse \pcreturn 0
+            \end{nicodemus}
+        \end{minipage}
+    }
+    \caption{Instantiation 1}
+    \label{fig:prf-security}
+\end{figure}
+
+\begin{definition}[$q$-DH Assumption]
+We say an adversary $\adv$ breaks the $q$-strong Diffie Hellman ($q$-SDH)assumption if it's running time is bounded by $t$ and
+$$\Pr[g^{\frac{1}{x}} \sample \adv(g,g^x,...,g^{x^q})] \geq \epsilon,$$
+where 
+$g \sample \G$ and $x \sample \mathbb{Z}_p^*$.
+We require that the $q$-DH assumption holds meaning that no adversary can $(t, \epsilon)$ break the $q$-DH problem for a polynomial $t$ and a non-negligible $\epsilon$.
+\end{definition}
+
+\begin{theorem}
+Suppose that there exists a $(t, q, \epsilon)$-forger $\fdv$ breaking the $\imp^{\IDAltV}$ of the $\ID_{q-\text{SDH}}$ identification scheme. Then there exists an adversary $\adv$ that $(t',q+1,\epsilon')-$ breaks the $q+1$-SDH assumption with $t \approx t'$ and 
+$\epsilon' \geq ?.$
+\end{theorem}
+\begin{proof}
+The $q$-SDH adversary $\adv$ receives $d_0,...,d_q$ as inputs where $d_i = g^{x^i}$ and simulates the $q$-SDH experiment as follows
+\subsection*{Key Generation:} The adversary $\adv$ first chooses random $\tau_1,...,\tau_q$ from $\mathbb{Z}_p$. Let $f$ be a univariate polynomial defined as 
+$f(X) = \prod_{i=1}^q (X+\tau_i)$. Expand $f$ and write $f(X) = \sum_{i=0}^q \alpha_i X^i$ where
+$\alpha_0,...,\alpha_q \in \mathbb{Z}_p$ are coefficients of the polynomial $f$. Adversary $\adv$ chooses a random $\theta \in \mathbb{Z}^*_p$, and computes
+$$g_1 \leftarrow \prod_{i=0}^q d_i^{\theta\alpha_i}$$
+which essentially means $g_1 = g^{\theta f(x)}$. $\adv$ can also calculates 
+$X = g_1^x = g^{xf(x)}$ similarly since $Xf(X)$ has a degree equal to $q+1$.
+\\
+Adversary $\adv$ returns $(g_1,X)$ as the public key to $\fdv$. This is indistinguishable from the normal key generation for $\mathbb{F}$ since $g_1$ is randomly distributed in $\G$ and $X$ is correctly computed.
+\end{proof}

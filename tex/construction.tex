@@ -1,26 +1,27 @@
 \section{Constructions}
 
 \begin{definition}[Signature scheme] To construct a signature $\Sig \coloneqq (\SigGen, \SigSgn,
-\SigVer )$from a 3-round tag-based identification scheme  $\ID \coloneqq(\IDGen, \IDP=(\IDP_1,\IDP_2) ,\ChSet, \IDV)$ we proceed as in Figure 4.
+\SigVer )$ from a 3-round tag-based identification scheme  $\ID \coloneqq(\IDGen, \IDP, \IDV)$ we proceed as in Figure 4.
 
 \begin{center}
 \begin{figure}[htb!]
     \nicoresetlinenr
     \fbox{
        
-        \begin{minipage}[t]{0.5\textwidth}
+        \begin{minipage}[t]{0.51\textwidth}
             \underline{$\SigGen(\pms)$:}
             \begin{nicodemus}
             \item $(\pk_0,\sk_0)\sample\IDGen$
             \item $(\pk_1,\sk_1)\sample\IDGen$
-            \item $pk \coloneq (\pk_0,\pk_1)$
-            \item $\sk \coloneq (\sk_0, \sk_1)$
+            \item $pk \coloneqq (\pk_0,\pk_1)$
+            \item $\sk \coloneqq (\sk_0, \sk_1)$
             \item $\pcreturn (\sk,\pk)$
             \end{nicodemus}
             
               \underline{$\SigVer(\pk,\sigma,\m):$}
             \begin{nicodemus}
-            	\item \pcif $\c_0+\c_1 \neq \Hash(\pk,\com_0,\com_1) $
+            	\item \pcparse $\sigma = (\com_0,\c_0,\s_0, \com_1, \c_1,\s_1)$
+            	\item \pcif $\c_0\oplus \c_1 \neq \Hash(\pk,\com_0,\com_1) $
 		\item \quad \pcthen \pcreturn $0$
 		\item \pcif $\IDV(\pk_0,\com_0,\c_0,\s_0) = 0$
 		\item \quad \pcthen \pcreturn $0$
@@ -39,8 +40,8 @@
 		\item $(\com_1,\st_1)\sample\IDP_1(\sk_1,\m)$ 
 		\item $ k = \Hash(\pk,\com_0,\com_1) $
   		\item $ e \sample \ChSet$
-		\item $ \c_0 = d+e $
-		\item $\c_1 = -e$  
+		\item $ \c_0 = d\oplus e $
+		\item $\c_1 = e$  
 		\item $\s_0 \sample\IDP_2(\sk_0,\st_0,\c_0)$
 		\item $ \s_1 \sample\IDP_2(\sk_1,\st_1,\c_1)$
 		\item $\sigma \coloneqq (\com_0,\c_0,\s_0, \com_1, \c_1,\s_1)$
@@ -56,16 +57,6 @@
 \end{center}
 \end{definition}
 
-
-\subsection{Security}
-
-\begin{theorem}
-Let  $\ID$ be a unique identification scheme and $\Hash$ be a $(t'',\epsilon'')$ correlation intractable hash function. Suppose there exists a $(t,q,\epsilon)$-forger $\mathcal{F}$ breaking the security of $\Sig_{\ID,\Hash}$ against the existential forgery under the random message attack. Then there exists an adversary that $(t',q,\epsilon')$-breaks the $\imp^{\IDAltV}$ security of $\ID$ with $t' \approx t$ and
-$$ \epsilon' \geq \frac{3}{4}\epsilon .$$
-\end{theorem}
-\begin{proof}
-This results follows from Lemma 1 and 2 and a hybrid argument.
-
 \begin{definition}[Partially valid signature]
 signature  $\sigma = (\com_{0},\c_{0},\s_{0}, \com_{1}, \c_{1},\s_{1})$ is
 partially valid if $\IDAltV(\pk_0,\com_0,\c_0,\s_0) =1$ or $\IDAltV(\pk_1,\com_1,\c_1,\s_1) = 1$
@@ -73,77 +64,173 @@ not partially valid if
  $\IDAltV(\pk_0,\com_0,\c_0,\s_0) =0$ and $\IDAltV(\pk_1,\com_1,\c_1,\s_1) =0$.
 
 \end{definition}
+\subsection{Security}
+\begin{figure}[htb!]
+    \centering
+    \nicoresetlinenr
+    \resizebox{\textwidth}{!}{\fbox{
+        \begin{minipage}[t]{0.8\textwidth}
+            \underline{$\G_0-\G_3$}
+            \begin{nicodemus}
+            \item $b \sample \{0,1\}$
+            \hfill\comment{$\G_2-\G_3 $}
+            \item $\BAD_2 \leftarrow \true$
+            \hfill\comment{$\G_2-\G_3 $}
 
-Let $(\m_i,\sigma_i)$ denote the $i$-th random message and it's signature. Let $(\m^*,\sigma^*)$ be the forgery output by $\mathcal{F}$.
-\\
-We distinguish between Type I forger returning $(\m^*, \sigma^*)$ where $(\m^*, \sigma^*)$ is patially valid  and Type II forger returning  $(\m^*, \sigma^*)$ where $(\m^*, \sigma^*)$ is not partially valid.
-\subsubsection{Type I forger} 
-\begin{lemma}
-Let $\mathcal{F}$ be a type I forger that $(t,q,\epsilon)$-breaks the RMA security of the signature. Then there exists adversary $\mathcal{A}$ that $(t',q,\epsilon')$-breaks the $\imp^{\IDAltV}$ security of the ID scheme with 
-$t \approx t'$ and 
-$$\epsilon' \geq \frac{1}{2} \epsilon.$$
-\end{lemma}
+            \item $(\pk_0,\sk_0)\sample\IDGen$
+            \item $(\pk_1,\sk_1)\sample\IDGen$
+            \item $pk \coloneqq (\pk_0,\pk_1)$
+            \item $\sk \coloneqq (\sk_0, \sk_1)$
+            \item \pcfor $i \in [q]$
+                \item \quad $ \m_i \sample \mathsf{M}$
+            	\item	\quad $(\com_{0,i},\st_{0,i})\sample\IDP_1(\sk_0,\m_i)$
+		\item \quad $(\com_{1,i},\st_{1,i})\sample\IDP_1(\sk_1,\m_i)$ 
+		\item \quad $ k_i = \Hash(\pk,\com_{0,i},\com_{1,i}) $
+  		\item \quad $ e_i \sample \ChSet$
+		\item \quad $ \c_{0,i} = k_i \oplus e_i $
+		\item \quad $\c_{1,i} = e_i$  
+		\item \quad $\s_{0,i} \sample\IDP_2(\sk_0,\st_{0,i},\c_{0,i})$
+		\item \quad $ \s_{1,i} \sample\IDP_2(\sk_1,\st_{1,i},\c_{1,i})$
+		\item \quad $\sigma_i \coloneqq (\com_{0,i},\c_{0,i},\s_{0,i}, \com_{1,i}, \c_{1,i},\s_{1,i})$
+                \item \quad $\Q \leftarrow \Q \cup (m_i,\sigma_i) $
+                \item $(\m*, \sigma^*)\gets\adv(\pk,\Q)$
+                \item \pcparse $\sigma^* = (\com_0^*,\c_0^*,\s_0^*, \com_1^*, \c_1^*,\s_1^*)$
+                \item \pcif $\IDAltV(\pk_0,\com^*_0,\c^*_0,\s^*_0) = 0 \land \IDAltV(\pk_0,\com^*_0,\c^*_0,\s^*_0) = 0$
+                 \hfill\comment{$\G_1-\G_3 $}
+                \item \pcthen $\BAD_1 \leftarrow \true;\abort$
+                 \hfill\comment{$\G_1-\G_3$}
+                 \item \pcif $\IDAltV(\pk_b,\com^*_b,\c^*_b,\s^*_b) = 0$
+                 \hfill\comment{$\G_2-\G_3 $}
+                 \item \pcthen $\BAD_2 \leftarrow \true;$
+                  \hfill\comment{$\G_2-\G_2 $}
+                 \item \quad $\abort$
+                  \hfill\comment{$\G_3 $}
+            	\item \pcif $\c_0^*+\c_1^* \neq \Hash(\pk,\com^*_0,\com^*_1) $
+		\item \quad \pcthen \pcreturn $0$
+		\item \pcif $\IDV(\pk_0,\com_0,\c_0,\s_0) = 0 \lor \IDV(\pk_1,\com_1,\c_1,\s_1) =0$
+		\item \quad \pcthen \pcreturn $0$
+		 \item $\pcif m^* \notin \{m_1,..,m_q\} $
+		 \item \quad \pcthen \pcreturn $0$
+		\item \pcelse \pcreturn $1$
+                
 
-\subsection*{Game 0.}
-We define Game 0 as the existential unforgeability experiment with forger $\mathcal{F}$. By definition, we have
+            \end{nicodemus}
+        \end{minipage}
+                       \begin{minipage}[t]{0.8\textwidth}
+            \underline{$\G_4$}
+            \begin{nicodemus}
+            \item $b \sample \{0,1\}$
+            \item $\BAD_2 \leftarrow \true$
+
+            \item $(\pk_0,\sk_0)\sample\IDGen$
+            \item $(\pk_1,\sk_1)\sample\IDGen$
+            \item $pk \coloneqq (\pk_0,\pk_1)$
+            \item $\sk \coloneqq (\sk_0, \sk_1)$
+            \item \pcfor $i \in [q]$
+                \item \quad $ \m_i \sample \mathsf{M}$
+            	\item	\quad $(\com_{0,i},\st_{0,i})\sample\IDP_1(\sk_0,\m_i)$
+		\item \quad $(\com_{1,i},\st_{1,i})\sample\IDP_1(\sk_1,\m_i)$ 
+		\item \quad $ k_i = \Hash(\pk,\com_{0,i},\com_{1,i}) $
+  		\item \quad $ e_i \sample \ChSet$
+		\item \quad $\c_{b,i} = e_i$  
+		\item \quad $ \c_{1-b,i} = k_i \oplus e_i $
+		\item \quad $\s_{0,i} \sample\IDP_2(\sk_0,\st_{0,i},\c_{0,i})$
+		\item \quad $ \s_{1,i} \sample\IDP_2(\sk_1,\st_{1,i},\c_{1,i})$
+		\item \quad $\sigma_i \coloneqq (\com_{0,i},\c_{0,i},\s_{0,i}, \com_{1,i}, \c_{1,i},\s_{1,i})$
+                \item \quad $\Q \leftarrow \Q \cup (m_i,\sigma_i) $
+                \item $(\m*, \sigma^*)\gets\adv(\pk,\Q)$
+                \item \pcparse $\sigma^* = (\com_0^*,\c_0^*,\s_0^*, \com_1^*, \c_1^*,\s_1^*)$
+                \item \pcif $\IDAltV(\pk_0,\com^*_0,\c^*_0,\s^*_0) = 0 \land \IDAltV(\pk_0,\com^*_0,\c^*_0,\s^*_0) = 0$
+                \item \pcthen $\BAD_1 \leftarrow \true;\abort$
+                 \item \pcif $\IDAltV(\pk_b,\com^*_b,\c^*_b,\s^*_b) = 0$
+                 \item \pcthen $\BAD_2 \leftarrow \true;$
+                 \item \quad $\abort$
+            	\item \pcif $\c_0^*+\c_1^* \neq \Hash(\pk,\com^*_0,\com^*_1) $
+		\item \quad \pcthen \pcreturn $0$
+		\item \pcif $\IDV(\pk_0,\com_0,\c_0,\s_0) = 0 \lor \IDV(\pk_1,\com_1,\c_1,\s_1) =0$
+		\item \quad \pcthen \pcreturn $0$
+		 \item $\pcif m^* \notin \{m_1,..,m_q\} $
+		 \item \quad \pcthen \pcreturn $0$
+		\item \pcelse \pcreturn $1$
+                
+
+            \end{nicodemus}
+        \end{minipage}
+    }}
+    \caption{}
+    \label{fig:x-soundess}
+\end{figure}
+\begin{theorem}
+Let  $\ID$ be a unique identification scheme and $\Hash$ be a $(t'',\epsilon'')$ correlation intractable hash function. Suppose there exists a $(t,q,\epsilon)$-forger $\mathcal{F}$ breaking the security of $\Sig_{\ID,\Hash}$ against the existential forgery under the random message attack. Then there exists an adversary that $(t',q,\epsilon')$-breaks the $\imp^{\IDAltV}$ security of $\ID$ with $t' \approx t$ and
+$$ \epsilon' \geq \frac{1}{2}(\epsilon + \epsilon'')$$
+\end{theorem}
+\begin{proof}
+
+We define the event of Game $\G_i$ winning (returning 1) as $X_i$. Let $(\m_i,\sigma_i)$ denote the $i$-th random message and its signature. Let $(\m^*,\sigma^*)$ be the forgery output by $\mathcal{F}$.
+\begin{description}[wide,itemindent=\labelsep]
+\item [] \textbf{Game 0.} We define Game 0 as the existential unforgeability experiment with forger $\mathcal{F}$ on the signature scheme$\Sig_{\ID,\Hash}$ as shown in Figure 5. By definition, we have
 $$\Pr[X_0] = \epsilon.$$
+\item [] \textbf{Game 1.} In $\G_1$ we check if the signature is partially valid or not and set $\BAD_1$ to $\true$ and $\abort$ if it isn't. Which according to Lemma 1 and $\Hash$ being $(t'',\epsilon'')$ correlation intractable happens with at most $\epsilon''$ probability and so we have 
+$$\Pr[X_1] = \Pr[X_0 \land \neg\BAD_1]  \geq \Pr[X_0] + \epsilon''.$$
 
-\subsection*{Game 1.}
-We modify this game such that the game chooses a random bit $b$ at the beginning. When $\mathcal{F}$ outputs a forgery  $(\m^*, \sigma^*)$ the game parses the signature as 
-$$(\com^*_{0},\c^*_{0},\s^*_{0}, \com^*_{1}, \c^*_{1},\s^*_{1})$$
- and aborts if 
-$\IDAltV(\pk_b,\com^*_b,\c^*_b,\s^*_b) =1$. We denote this even with $\abort$.
-\\
-Since the forger is of type I and outputs a partially valid signature, we have
-$\Pr[\abort] \leq \frac{1}{2}$, which implies
-$$\Pr[X_1] = \Pr[X_0 \land \neg \abort] \geq \frac{1}{2} \Pr[X_0].$$
+\item [] \textbf{Game 2.} In $\G_2$ we pick a random bit $b$ in the beginning of the game and after getting the forged signature $\sigma^*$ which we parse as 
+$$\sigma^* = (\com_0^*,\c_0^*,\s_0^*, \com_1^*, \c_1^*,\s_1^*),$$
+we check whether $\IDAltV(\pk_b,\com^*_b,\c^*_b,\s^*_b)$ is zero and set the tag $\BAD_2$ to $\true$ if it is. Since this change is only internal to the game 
+$$\Pr[X_1] = \Pr[X_2].$$
+\item [] \textbf{Game 3.} In $\G_3$ we abort if $\BAD_2$ that we defined in the last game is set to $\true$. Since the game would have already aborted if the forged signature was not partially valid signature and $b$ was chosen randomly in the beginning, we have
+$\Pr[\BAD_2] \leq \frac{1}{2}$, which implies
+$$\Pr[X_3] = \Pr[X_2 \land \neg \BAD_2] \geq \frac{1}{2} \Pr[X_2].$$
 
-\subsection*{Game 2.}
-In this Game we change the way signatures are calculate.
-The game first signs every signature as before then changes every signature $\sigma_i = (\com_{0,i},\c_{0,i},\s_{0,i}, \com_{1,i}, \c_{1,i},\s_{1,i})$ for message $m_i$ as follows.
-$$(\com_{1-b,i},\st_{1-b,i})\sample\IDP_1(\sk_{1-b},\m_i)$$
-$$ k_i = \Hash(\pk,\com_{0,i},\com_{1,i}) $$
-$$\c_{1-b,i} = k_i - \c_{b,i} $$
-$$\s_{1-b,i} \sample\IDP_2(\sk_{1-b},\st_{1-b,i},\c_{1-b,i})$$
-Finally the game returns the newly calculated signature $\sigma_i$ to $\mathcal{F}$.
-\\
-Game 2 is perfectly indistinguishable from game 1 from the adversary's point of view. Thus we have
-$$\Pr[X_2] = \Pr[X_1].$$
+\item [] \textbf{Game 4.} 
+Game $\G_4$ is exactly like $\G_3$ except instead of always choosing $\c_{0,i}$ randomly from the $\ChSet$ and then calculating $\c_{1,i}$ accordingly, we choose $\c_{b,i}$ first and then calculate 
+$\c_{1-b,i}$. Since the distribution of $(\c_{0,i},\c{1,i})$ does not change we have
+$$\Pr[X_4] = \Pr[X_3].$$
+We point out that in this game we can choose $(\m_i, \com_{b,i}, \c_{i,b}, \s_{b,i})$ first and then calculate 
+$(\com_{1-b,i}, \c_{1-b,i}, \s_{1-b,i})$ and thus the signature $\sigma_i$ accordingly.
 
-\subsection*{The Alternative Impersonation Adversary.}
-Now adversary $\adv$ simulates game 2. The $\adv$ receives $pk_{b}$ and $(\tau_i, \com_{b,i}, S_{i,b})$ from the alternative impersonation game and proceeds to calculate the public key and signatures on message $m_i := \tau_i$ as in game 2.
+\end{description}
+
+Now adversary $\adv$ simulates game $\G_4$. The $\adv$ receives $\pk_{b}$ and $(\tau_i, \com_{b,i},\c_{b,i},\s_{b,i})$ from the alternative impersonation game and proceeds to
+run $\IDGen$ to obtain $\pk_{1-b}$ and
+ calculate signatures on message $m_i := \tau_i$. As pointed out before it is possible to calculate $\sigma_i$ according to $(\tau_i, \com_{b,i},\c_{b,i},\s_{b,i})$.
 \\
 It remains to show how $\adv$ can break the alternative impersonation from the forged signature
-$\sigma^* = (\com^*_{0},\c^*_{0},\s^*_{0}, \com^*_{1}, \c^*_{1},\s^*_{1})$ on message $m^*$ output by $\mathcal{F}$. We know that $\IDAltV(\sk_b,m^*,\com^*_b,\c^*_b,\s^*_b) =1$ (by game 1).  So $\adv$ can win the alternative impersonation game by outputing $(\m^*,\com^*_b,\c^*_b,\s^*_b)$.
+$\sigma^* = (\com^*_{0},\c^*_{0},\s^*_{0}, \com^*_{1}, \c^*_{1},\s^*_{1})$ on message $m^*$ output by $\mathcal{F}$. We know that $\IDAltV(\sk_b,m^*,\com^*_b,\c^*_b,\s^*_b) =1$ (by game 2).  So $\adv$ can win the alternative impersonation game by outputting $(\m^*,\com^*_b,\c^*_b,\s^*_b)$.
+\\
+So putting all of this together we have 
+$$\Pr[X_4] = \epsilon' \geq \frac{1}{2}(\epsilon + \epsilon'')$$
+\end{proof}
 
-\subsubsection{Type II forger} 
 \begin{lemma}
-Let $\mathcal{F}$ be a type II forger that $(t,q,\epsilon)$-breaks the RMA security of the signature. Then there exists adversary $\mathcal{A}$ that $(t',\epsilon')$-breaks the correlation intractability of the hash function $\Hash$ with 
-$t \approx t'$ and 
-$$\epsilon' \geq \epsilon.$$
+Let $\mathcal{F}$ be a forger that $(t,q,\epsilon)$-breaks the RMA security of the signature such that the forged signature it outputs is not partially valid. Then there exists adversary $\mathcal{A}$ that $(t'',\epsilon'')$-breaks the correlation intractability of the hash function $\Hash$ with 
+$t \approx t''$ and 
+$$\epsilon'' \geq \epsilon.$$
 \end{lemma}
 
-The correlation intractability adversary $\adv$ simulates the unforgeability experiment by
+\begin{proof}
+The correlation intractability adversary $\adv$ runs the unforgeability experiment by
 running $\IDGen$ twice and obtaining two pairs of keys we name $(\sk_0,\pk_0)$ and $(\sk_1, \pk_1)$. The adversary now return 
 $\pk := (\pk_0, \pk_1)$ to $\mathcal{F}$ as the public key and also
 chooses random messages $m_1,...,m_q$ and signs them with the secret key 
-$\sk := (\sk_0, \sk_1)$ to obtain the signatures $\sigma_1,...,\sigma_q$ and returns the $(m_i,\sigma_i)$ pairs to $\mathcal{F}$. This game is indistinguishable from the unforgeability game in the view of $\mathcal{F}$.
-
-\subsection*{Breaking the hash intractability.}
+$\sk := (\sk_0, \sk_1)$ to obtain the signatures $\sigma_1,...,\sigma_q$ and returns the $(m_i,\sigma_i)$ pairs to $\mathcal{F}$.
+\\
 Eventually, $\mathcal{F}$ returns a message and signature pair 
- $(\m^*, \sigma^*)$, from which $\adv$ extracts the solution that breaks the hash intractability as follows. First $\adv$ parses $\sigma^*$
+ $(\m^*, \sigma^*)$, from which $\adv$ extracts the solution that breaks the hash intractability as follows.
+ \\
+ First $\adv$ parses $\sigma^*$
 as
 $(\com^*_{0},\c^*_{0},\s^*_{0}, \com^*_{1}, \c^*_{1},\s^*_{1})$.
-We assume the signature is valid and because forger type II outputs signatures that are not partially valid, due to the uniqueness of the identification scheme
+We assume that the forged signature is valid and since it is not partially valid, due to the uniqueness of the identification scheme
  we can write
 $$\c^*_0 = f(\pk_0,\com^*_0)$$
 $$\c^*_1 = f(\pk_1,\com^*_1).$$
-If the forged signature is valid then 
-$$\Hash(\pk,\com^*_0,\com^*_1)=\c^*_0+\c^*_1 =  f(\pk_0,\com^*_0)+ f(\pk_1,\com^*_1) = g(\pk,\com^*_0,\com^*_1).$$
+Since we have assumed the forged signature is valid 
+$$\Hash(\pk,\com^*_0,\com^*_1)=\c^*_0+\c^*_1 =  f(\pk_0,\com^*_0)+ f(\pk_1,\com^*_1) = g(\pk,\com^*_0,\com^*_1)$$
+must hold.
 So $\adv$ can $(t,\epsilon')$ break the $g$-correlation intractability of $\Hash$ where $g$ is defined as 
 $$g(\pk=(\pk_0,\pk_1), \com_0, \com_1) =  f(\pk_0,\com_0)+ f(\pk_1,\com_1).$$
 Adversary $\adv$ succeeds at giving a solution that breaks the correlation intractability of $\Hash$ whenever $\mathcal{F}$ succeeds at forging a valid signature so
-$$\epsilon'\geq\epsilon.$$
+$$\epsilon''\geq\epsilon.$$
 
 \end{proof}
 

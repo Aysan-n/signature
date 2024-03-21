@@ -19,64 +19,15 @@
 % $$
 
 
-\begin{definition}[3-round Tag-based Identification Scheme]
-A 3-round identification (ID) scheme is defined as $\ID \coloneqq(\IDGen, \IDP=(\IDP_1,\IDP_2) ,\ChSet, \IDV)$.
-\begin{itemize}
-\item The probabilistic generation algorithm $\IDGen$ takes the public parameter $1^k$ as input and returns a public key and secret key $(\pk,\sk)$. We assume that $\pk$ defines the challenge set $\ChSet$.
+\subsection{Signatures}
 
-\item The prover algorithm $\IDP = (\IDP_1,\IDP_2)$ is split into two algorithms. $\IDP_1$ takes the secret key $\sk$ and a tag $\tau$ from the tag space $\mathsf{M}$ as the input and returns the commitment $\com$ and a state $\st$. $\IDP_2$ takes the secret key $\sk$, the state $\st$ and a challenge $\c$ as an input and returns a response $\s$. 
+A digital signature scheme consists of three algorithms $(\SigGen, \SigSgn, \SigVer)$. A key generation algorithm $\SigGen$, a signing algorithm $\SigSgn$ and a verification algorithm $\SigVer$. $\SigGen$ is a randomised algorithm that produces a random key pair consisting of a public key $\pk$ and a secret key $\sk$. The probabilistic signing algorithm $\SigSgn$ requires a secret key and a message from the message space $\mathsf{M}$ and produces a signature $\sigma$. Finally, the verification algorithm $\SigVer$ takes a public key, a message and a signature as input and returns either 0/reject or 1/accept. A signature scheme is called correct, if every signature on a message generated with a secret key is accepted under the corresponding public key.
 
-\item The deterministic verifier algorithm $\IDV$ takes the public key $\pk$, the tag $\tau$, the commitment $\com$, the challenge $\c$ and the response $\s$ as an input and outputs a decision, 1 (acceptance) or 0 (rejection).
-\end{itemize}
-For correctness we require that for all $k \in \mathbb{N}$,
-$(\pk,\sk) \in \IDGen(1^k)$,
-all
-$(\com,\st) \in \IDP_1(\sk, \tau)$,
-all $\c \in \ChSet$ and all 
-$\s \in \IDP_2(\sk,\st,\c)$,
-we have
-$$ \IDV(\pk,\com,\c,\s) = 1.$$
-\begin{figure}[H]
-  \centering
-   \nicoresetlinenr
-\vspace{2em}
- \fbox{
- \pseudocode{%
- \textbf{ Prover} \< \< \textbf{ Verifier}  \\[0.1\baselineskip][\hline]
-  \<\< \\[-0.5\baselineskip]
-(\com,\st) \sample \IDP_1(\sk,\tau)
-  \< \sendmessageright*{\tau,\com} \< \\[-2ex]
-  \<\< \c \sample \ChSet \\[-4ex]
-  \< \sendmessageleft*{\c} \< \\
-  \s \sample\IDP_2(\sk,\st,\c) 
-  \< \sendmessageright*{\s} \< \\[-2ex]
-   \<\< d \coloneqq \IDV(\pk,\com,\c,\s)
-  }
-  
- }
-  \caption{3-round Tag-based Identification Scheme}
- \end{figure}
-
-\end{definition}
-
-
-\begin{definition}[Alternative Verification]
-We say the deterministic function $\IDAltV$ is an alternative verification for an identification scheme $\ID$, if $\IDAltV$ takes the secret key $\sk$, the tag $\tau$, the commitment $\com$, the challenge $\c$ and the response $\s$ as an input and outputs a decision, 1 (acceptance) or 0 (rejection).
-\\
-For correctness we require that for all $k \in \mathbb{N}$,
-$(\pk,\sk) \in \IDGen(1^k)$,
-all
-$(\com,\st) \in \IDP_1(\sk, \tau)$,
-all $\c \in \ChSet$ and all 
-$\s \in \IDP_2(\sk,\st,\c)$,
-we have
-$$ \IDAltV(\sk,\tau,\com,\c,\s) = 1.$$
-
-\end{definition}
-
-\begin{definition}[Alternative Impersonation]
-A 3-round tag based identification scheme is said to be $(t,q,\epsilon)-\imp^{\IDAltV}$ secure, if for all adversary $\adv$ running in time at most $t$ we have
-$$\Pr[q\hyph\xsoundness^{\IDAltV}_{\ID}(\adv)]=1] \leq \epsilon.$$
+\begin{definition}[RMA security]
+A signature scheme $\Pi = (\SigGen, \SigSgn, \SigVer)$ is said to be $(t,q,\epsilon)$-secure against existential forgery under the random message attack (EUF-RMA), if for all adversary $\adv$ running in time at most $t$ we have
+$$\Pr[q\hyph\rma_{\Pi}(\adv)]=1] \leq \epsilon.$$
+We say $\adv$, $(t,q,\epsilon)$-breaks the EUF-RMA security of the signature if
+$$\Pr[q\hyph\rma_{\Pi}(\adv)=1] > \epsilon$$
 \end{definition}
 
 
@@ -86,18 +37,16 @@ $$\Pr[q\hyph\xsoundness^{\IDAltV}_{\ID}(\adv)]=1] \leq \epsilon.$$
     \nicoresetlinenr
     \fbox{
         \begin{minipage}[t]{0.8\textwidth}
-            \underline{$\textbf{Game } q\hyph\xsoundness^{\IDAltV}_{\ID}(\adv)$}
+            \underline{$\textbf{Game } q\hyph\rma_{\Pi}(\adv)$}
             \begin{nicodemus}
-            	\item $(\sk,\pk)\sample\IDGen$
+            	\item $(\sk,\pk)\sample\SigGen$
 		\item $\Q \leftarrow \emptyset$
                 \item \pcfor $i \in [q]$
-                \item \quad $ \tau_i \sample \mathsf{M}$
-                \item \quad $(\com_i,\st_i)\sample\IDP_1(\sk,\tau_i)$
-                \item \quad $ \c_i \sample \ChSet $
-                \item \quad $\s_i \sample\IDP_2(\sk,\st_i,\c_i)$
-                \item \quad $\Q \leftarrow \Q \cup (\tau_i,\com_i,\c_i,\s_i) $
-                \item $(\tau^*, \com^*,\c^*,\s^*)\gets\adv(\pk,\Q)$
-                \item $\pcif \IDAltV(\sk, \tau^*, \com^*,\c^*,\s^*) = 1 \pcthen \pcreturn 1$
+                \item \quad $ \m_i \sample \mathsf{M}$
+                \item \quad $\sigma_i \sample \SigSgn(\sk,\m_i)$
+                \item \quad $\Q \leftarrow \Q \cup (m_i,\sigma_i) $
+                \item $(\m*, \sigma^*)\gets\adv(\pk,\Q)$
+                \item $\pcif \SigVer(\pk,\m^*,\sigma^*) = 1 \land m^* \notin \{m_1,..,m_q\}  \pcthen \pcreturn 1$
                 \item $\pcelse \pcreturn 0$
             \end{nicodemus}
         \end{minipage}
@@ -108,33 +57,53 @@ $$\Pr[q\hyph\xsoundness^{\IDAltV}_{\ID}(\adv)]=1] \leq \epsilon.$$
 
 
 
+\subsection{Hash Functions}
 
-\begin{definition}[$\uniqueness$]
-We say the identification scheme $\ID \coloneqq(\IDGen, \IDP ,\ChSet, \IDV)$ is
-unique if for every $(\sk,\pk)\sample\IDGen$ and every $(\com,\st)\sample\IDP_1(\sk,\tau)$,
-$$\big{|}\{\c \in \ChSet \mid \exists \s : \IDV(\pk,\com,\c,\s) = 1 \land \IDAltV(\sk, \com, \C,  \s) \neq 1 \}\big{|} = 1.$$
-This means there exist a (not necessarily polynomial time) function we call the uniqueness function such as $f$ that
-$$f(\pk,\com) = \c.$$
-\end{definition}
-
-
-\begin{definition}[RMA security]
-We define the existential forgery against the random message attack (EUF-RMA) security experiment, played between a challenger and a forger $\mathcal{F}$.
-\begin{enumerate}
-\item The challenger runs $\SigGen$ to generate key pair $(\pk,\sk)$. 
-The forger receives $\pk$ as input.
-\item The challenger now chooses $q$ random messages and signs them and returns $(\m_i,\sigma_i)$ to the forger where $\sigma_i$ is $\m_i$ signed under $\sk$.
-\item The forger outputs a message $\m^*$ and signature $\sigma^*$.
-\end{enumerate}
-$\mathcal{F}$ wins the game if $\SigVer(\pk,\sigma,\m) = 1$, that is, $\sigma^*$ is a valid signature for $\m^*$, and $\m^* \neq \m_i$ for all $i$. We say $\mathcal{F}$, $(t,q,\epsilon)$-breaks the EUF-RMA security of the signature, if $\mathcal{F}$ runs in time $t$, receives at most $q$ signed messages, and has the success probability of $\epsilon$. 
-\end{definition}
-
+Let $\mathbb{G}= (\G_k)$ be a family of groups, indexed by the security parameter $k \in \mathbb{N}$. We omit the subscript when the reference to the security parameter is clear, thus write $\G$ for $\G_k$.
+\\
+A \textit{group hash function} $\Hash$  over $\G$ with input length $l =l(k)$ consists of two efficient algorithms $\phfGen$ and $\phfEval$. The probabilistic algorithm 
+$\kappa \sample \phfGen(1^k)$ generates a hash key $\kappa$ for the security parameter $k$. Algorithm 
+$\phfEval$ is a deterministic algorithm, taking as input a hash function key $\kappa$ and $X \in \{0,1\}^l$, and returning $\phfEval(\kappa,X) \in \G$. In the context were $\kappa$ is clear we write 
+$\phfEval(\kappa,X)$ as $\Hash(X)$.
+\\
 
 \begin{definition}[Correlation Interactibilty]
-We say an adversary $\adv$, $(t, \epsilon)-$breaks the correlation intractability of a hash function  $\Hash: \{0,1\}^{n(\lambda)} \rightarrow \{0,1\}^{m(\lambda)}$ with regards to function $g$ if $\adv$ runs in time $t$ and 
-$$\Pr[x \sample \adv, \Hash(x) = g(x)] \geq \epsilon(\lambda).$$
+We say an adversary $\adv$, $(t, \epsilon)-$breaks the correlation intractability of a hash function  $\Hash = (\phfGen, \phfEval)$ with regards to function $g$ if $\adv$ runs in time $t$ and 
+$$\Pr[x \sample \adv, \phfEval(\kappa, x) = g(x); \kappa \sample \phfGen] \geq \epsilon.$$
 We call the hash function $(t, \epsilon)-$correlation intractable if such an adversary does not exist.
 \end{definition}
+
+
+\begin{definition}
+A group hash function $H = (\phfGen, \phfEval)$ is a $(m,n,n\gamma,\delta)-$programmable, if there is an efficient trapdoor key generation algorithm $\phfTG$ and an efficient trapdoor evaluation algorithm $\phfTE$ with the following properties.
+\begin{enumerate}
+\item The probabilistic  trapdoor generation algorithm 
+$(\kappa, \eta) \sample \phfTG(1^k,g_1,g_2)$ takes as input group elements 
+$g,h \in \G$, and produces a hash function key $\kappa$ together with trapdoor information 
+$\eta$.
+\item For all generators
+$g_1,g_2 \in \G$, the keys 
+$\kappa \sample \phfGen(1^k)$ and 
+$\kappa' \sample \phfGen(1^k,g_1,g_2)$ are statistically
+$\gamma$-close.
+\item 
+On input $X \in \{0,1\}^l$ and trapdoor information $\eta$, the deterministic trapdoor evaluation algorithm
+$(a_X,b_X) \leftarrow \phfTE(\eta,X)$ produces $a_X,b_X \in \mathbb{Z}$ so that for all 
+$Xin \{0,1\}^l$,
+$$\phfEval(\kappa, X) = g_1^{a_X}g_2^{b_X}.$$
+\item For all $g_1,g_2 \in \G$, all $\kappa$ generated by 
+$\kappa \sample \phfTG(1^k,g_1,g_2)$, and all 
+$X_1,..,X_m \ in \{0,1\}^l$ and
+$Z_1,...,Z_n \in \{0,1\}^l$ such that $X_i \neq Z_j$ for all $i,j$, we have
+$$\Pr[a_{X_1}=...=a_{X_m}= 0 \land a_{Z_1},...,a_{Z_n} \neq 0]\geq \delta$$
+where 
+$(a_{X_i},b_{X_i}) = \phfTE(\eta, X_i)$ and $(a_{Z_i},b_{Z_i}) = \phfTG(\eta, Z_j)$, and the probability is taken over the trapdoor $\eta$ produced along with $\kappa$.
+\end{enumerate}
+\end{definition}
+
+
+
+
 
 
 
