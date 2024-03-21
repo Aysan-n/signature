@@ -17,6 +17,11 @@
 % capitalised, unless it's an acronym, in which case all letters are capitalised. The primitive name is only prepended
 % to an interface if there is ambiguity with another defined primitive.
 \newcommand{\NIKE}{\mathsf{NIKE}}
+\newcommand{\phf}{\mathsf{PHF}}
+\newcommand{\phfGen}{\phf.\mathsf{Gen}}
+\newcommand{\phfEval}{\phf.\mathsf{Eval}}
+\newcommand{\phfTE}{\phf.\mathsf{TrapEval}}
+\newcommand{\phfTG}{\phf.\mathsf{TrapGen}}
 \newcommand{\Stp}{\mathsf{Stp}}
 \newcommand{\NIKEGen}{\mathsf{Gen}}
 \newcommand{\Sdk}{\mathsf{Sdk}}
@@ -74,6 +79,7 @@
 \newcommand{\IDV}{\mathsf{V}}
 \newcommand{\IDAltV}{\tilde{\IDV}}
 \newcommand{\ChSet}{\mathsf{ChSet}}
+\newcommand{\tgSet}{\mathsf{TgSet}}
 
 \newcommand{\KEMEnc}{\mathsf{Enc}}
 \newcommand{\KEMDec}{\mathsf{Dec}}
@@ -95,7 +101,8 @@
 \newcommand{\kemprG}{\kempr_{\KEM}(\adv)}
 
 \newcommand{\xsoundness}{\imp \hyph \mathsf{ALT}}
-
+\newcommand{\rma}{\mathsf{EUF} \hyph \mathsf{RMA}}
+\newcommand{\CI}{\mathsf{CI}}
 
 \newcommand{\AKEM}{\mathsf{AKEM}}
 \newcommand{\AKEMGen}{\mathsf{Gen}}
@@ -362,6 +369,7 @@
 \renewcommand{\pcadvantagesuperstyle}[1]{\mathrm{#1}}
 \renewcommand{\adv}{\mathcal{A}}
 \renewcommand{\bdv}{\mathcal{B}}
+\newcommand{\fdv}{\mathcal{F}}
 \renewcommand{\cdv}{\mathcal{C}}
 \renewcommand{\sim}{\mathsf{S}}
 \newcommand{\Zp}{\ZZ_p}
