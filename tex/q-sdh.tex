@@ -1,5 +1,5 @@
-\section{Instantiation from the q-SDH Assumption}
-In the following let $\pms \coloneqq (p,\G) $ be a set of system parameters, where 
+\section{Instantiation of dual tag ID from q-SDH}
+Throughout thus section let $\pms \coloneqq (p,\G) $ be a set of system parameters, where 
 $\G $ is a cyclic group of prime order $p$.
 
 \begin{definition}[$q$-SDH Assumption]
@@ -7,7 +7,6 @@ We say an adversary $\adv$ breaks the $q$-strong Diffie Hellman ($q$-SDH)assumpt
 $$\Pr[(s,g^{\frac{1}{s+x}}) \sample \adv(g,g^x,...,g^{x^q})] \geq \epsilon,$$
 where 
 $g \sample \G$ and $x \sample \mathbb{Z}_p^*$.
-We require that the $q$-SDH assumption holds meaning that no adversary can $(t, \epsilon)$ break the $q$-SDH problem for a polynomial $t$ and a non-negligible $\epsilon$.
 \end{definition}
 
 \begin{figure}[htb!]
@@ -73,7 +72,7 @@ We describe the identification scheme  $\ID_{q-\text{SDH}} \coloneqq(\IDGen, \ID
 
 \begin{theorem}
 Suppose that there exists a $(t, q, \epsilon)$-forger $\fdv$ breaking the $\imp^{\IDAltV}$ of the $\ID_{q-\text{SDH}}$ identification scheme. Then there exists an adversary $\adv$ that $(t',q+1,\epsilon')-$ breaks the $q+1$-SDH assumption with $t \approx t'$ and 
-$\epsilon' \geq ?.$
+$\epsilon' \geq \epsilon.$
 \end{theorem}
 \begin{proof}
 The $q$-SDH adversary $\adv$ receives $d_0,...,d_q$ as inputs where $d_i = g^{x^i}$ and simulates the $q$-SDH experiment as follows
@@ -102,8 +101,8 @@ $$\hat{g}_i = g^{\theta f_i(X)} =  g_1^{\frac{1}{x+\tau_i}}.$$
 
 
  Then $\adv$ chooses  $\c_i,\s_i\sample\mathbb{Z}_p$ and computes
-$$R = g_1^\s \cdot(X\cdot g_1^{\tau})^{-\c} $$
-$$\hat{R} = \hat{g}^\s \cdot (g\cdot \hat{g}^{-\tau} )^\c.$$
+$$R = g_1^{\s_i }\cdot(X\cdot g_1^{\tau})^{-\c_i} $$
+$$\hat{R} = \hat{g}^\s_i \cdot (g\cdot \hat{g}^{-\tau} )^\c_i.$$
 Now $\adv$ returns $(\com_i = (\hat{g},R,\hat{R}),\c_i,\s_i)$ to $\fdv$ and this is indistinguishable from the normal transcript generation for $\fdv$ since if we define $r$ to be $r = \s-\c x$ then $R = g_1^x$ and 
 $\hat{R} = \hat{g}^x$ and also since $\s$ and $\c$ are uniformly distributed in $\mathbb{Z}_p$ so is $r$.
 \subsection*{Breaking the $q+1$-SDH:}

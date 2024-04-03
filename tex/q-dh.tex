@@ -1,6 +1,6 @@
-\section{Instantiation from the q-DH Assumption}
+\section{Instantiation of dual tag ID from q-DH}
 We describe the identification scheme as in figure 5.
-In the following we will write $D(\tau)$ shorthand for 
+Throughout this section we will write $D(\tau)$ shorthand for 
 $\phfEval(\kappa,\tau)$ and $d(\tau)$ shorthand for the function computing
 $(a,b) \leftarrow \phfTE(\eta,\tau)$ and returning $ax+b$.
 \begin{figure}[htb!]
@@ -13,17 +13,18 @@ $(a,b) \leftarrow \phfTE(\eta,\tau)$ and returning $ax+b$.
             	\item $g_1,g_2 \sample \G$
 		\item $x \sample \mathbb{Z}_p$
                 \item $X = g_2^x$
-                \item $(\kappa, \eta) \sample \phfTG(1^k,g_2,X)$
+                \item $(\kappa, \eta) \sample \phfTG(g_2,X)$
                 \item $\pk \coloneqq (g_1,g_2,\kappa)$
                 \item $\sk \coloneqq (\pk,x,\eta)$
                 \item $\ChSet \coloneqq \mathbb{Z}_p$
                 \item $\pcreturn (\sk,\pk)$
             \end{nicodemus}
+            
             \underline{$\IDV(\pk,\tau,\com,\c,\s)$}:
             \begin{nicodemus}
             	\item $\pcparse \com = (\hat{g},R,\hat{R})$
-      		\item \pcif $R = g^\s \cdot(X\cdot g^{\tau})^{-\c} \land$
-		\item$ \quad \hat{R} = \hat{g}^\s \cdot (g\cdot \hat{g}^{-\tau} )^\c$
+      		\item \pcif $R = g_2^\s \cdot D(\tau)^{-\c} \land$
+		\item$ \quad \hat{R} = \hat{g}\cdot g_1^{-\c}$
                  \item \quad \pcthen \pcreturn 1
                  \item \pcelse \pcreturn 0
             \end{nicodemus}
@@ -36,8 +37,8 @@ $(a,b) \leftarrow \phfTE(\eta,\tau)$ and returning $ax+b$.
             \begin{nicodemus}
             	\item $r \sample \mathbb{Z}_p$
                 \item $\st \coloneqq (\tau,r )$
-                \item $\hat{g} \coloneqq g^{\frac{1}{d(\tau)}}$
-                \item $R \coloneqq g^r$
+                \item $\hat{g} \coloneqq g_1^{\frac{1}{d(\tau)}}$
+                \item $R \coloneqq g_2^r$
                 \item $\hat{R} \coloneqq \hat{g}^r$
                 \item $\com := (\hat{g},R,\hat{R})$
                 \item $\pcreturn (\com,\st)$
@@ -52,8 +53,8 @@ $(a,b) \leftarrow \phfTE(\eta,\tau)$ and returning $ax+b$.
                         \underline{$\IDAltV(\sk,\tau,\com, \c,\s)$}:
             \begin{nicodemus}
                 \item \pcparse $\com = (\hat{g},R,\hat{R})$
-                \item \pcparse $\sk = x$
-                \item \pcif $\hat{g} = g^{\frac{1}{x+\tau}}$ 
+                \item \pcparse $\sk = (\pk,x,\eta)$
+                \item \pcif $\hat{g} = g_2^{\frac{1}{d(\tau)}}$ 
                 \item \quad \pcthen \pcreturn 1
                 \item \pcelse \pcreturn 0
             \end{nicodemus}
@@ -64,25 +65,149 @@ $(a,b) \leftarrow \phfTE(\eta,\tau)$ and returning $ax+b$.
 \end{figure}
 
 \begin{definition}[$q$-DH Assumption]
-We say an adversary $\adv$ breaks the $q$-strong Diffie Hellman ($q$-SDH)assumption if it's running time is bounded by $t$ and
+We say an adversary $\adv$ breaks the $q$- Diffie Hellman ($q$-DH) assumption if it's running time is bounded by $t$ and
 $$\Pr[g^{\frac{1}{x}} \sample \adv(g,g^x,...,g^{x^q})] \geq \epsilon,$$
 where 
 $g \sample \G$ and $x \sample \mathbb{Z}_p^*$.
 We require that the $q$-DH assumption holds meaning that no adversary can $(t, \epsilon)$ break the $q$-DH problem for a polynomial $t$ and a non-negligible $\epsilon$.
 \end{definition}
 
+
 \begin{theorem}
-Suppose that there exists a $(t, q, \epsilon)$-forger $\fdv$ breaking the $\imp^{\IDAltV}$ of the $\ID_{q-\text{SDH}}$ identification scheme. Then there exists an adversary $\adv$ that $(t',q+1,\epsilon')-$ breaks the $q+1$-SDH assumption with $t \approx t'$ and 
+Suppose that there exists a $(t, q, \epsilon)$-forger $\fdv$ breaking the $\imp^{\IDAltV}$ of the $\ID_{q-\text{DH}}$ identification scheme. Then there exists an adversary $\adv$ that $(t',q+1,\epsilon')-$ breaks the $q+1$-SDH assumption with $t \approx t'$ and 
 $\epsilon' \geq ?.$
 \end{theorem}
 \begin{proof}
-The $q$-SDH adversary $\adv$ receives $d_0,...,d_q$ as inputs where $d_i = g^{x^i}$ and simulates the $q$-SDH experiment as follows
-\subsection*{Key Generation:} The adversary $\adv$ first chooses random $\tau_1,...,\tau_q$ from $\mathbb{Z}_p$. Let $f$ be a univariate polynomial defined as 
-$f(X) = \prod_{i=1}^q (X+\tau_i)$. Expand $f$ and write $f(X) = \sum_{i=0}^q \alpha_i X^i$ where
+We define the event of Game $\G_i$ winning (returning 1) as $X_i$. Let $\tau_i$ denote the $i$-th random tag in the alternative impersonation game. Let $(\tau^*,\com^*, \c^*, \s^*)$ be the forgery output by $\mathcal{F}$.
+\begin{description}[wide,itemindent=\labelsep]
+\item [] \textbf{Game 0.} We define Game 0 as the alternative impersonation game and so by definition
+$$\Pr[X_0] = \epsilon.$$
+\item [] \textbf{Game 1.} In this game we choose the tags $\tau_1,...,\tau_q$ all in the beginning. This does not effect the success probability of the adversary so 
+$$\Pr[X_1] = \Pr[X_0].$$
+\item [] \textbf{Game 2.} In this game we compute
+$(l_i,k_i) \leftarrow \phfEval(\kappa,\tau_i)$ for every $\tau_i$ and set $\BAD$ to $\true$ if for any $i$, $l_i$ is zero. We also compute $(l^*,k^*) \leftarrow \phfEval(\kappa,\tau^*)$ when the adversary has output the forgery and set $\BAD$ to $\true$ if $l^*$ is not zero.
+\\
+By the $(1, \poly, \gamma, \delta)-$programmability of $D$ we have
+$$\Pr[\neg \BAD] \geq \delta$$
+\item [] \textbf{Game 3.} This game is exactly like the last game except that we abort the game if $\BAD$ is $\true$ which means
+$$\Pr[X_3] = \Pr[X_2 \land \neg \abort] \geq \delta \cdot \Pr[X_2]$$
+\end{description}
+
+
+\begin{figure}[htb!]
+    \centering
+    \nicoresetlinenr
+    \fbox{
+        \begin{minipage}[t]{0.7\textwidth}
+            \underline{$\G_0-\G_3$}
+            \begin{nicodemus}
+            	\item $\BAD \leftarrow \false$
+	\hfill\comment{$\G_2 - \G_3$}
+           	 \item \pcfor $i \in [q]$
+	 \hfill\comment{$\G_1 - \G_3$}
+                \item \quad $ \tau_i \sample \mathbb{Z}_p$
+                \hfill\comment{$\G_1 - \G_3$}
+           \item $g_1,g_2 \sample \G$
+		\item $x \sample \mathbb{Z}_p$
+                \item $X = g_2^x$
+                \item $(\kappa, \eta) \sample \phfTG(g_2,X)$
+                \item $\pk \coloneqq (g_1,g_2,\kappa)$
+                \item $\sk \coloneqq (\pk,x,\eta)$
+
+		\item $\Q \leftarrow \emptyset$
+                \item \pcfor $i \in [q]$
+                \item \quad $ \tau_i \sample \mathbb{Z}_p$
+                \hfill\comment{$\G_0$}
+                \item  \quad $r_i \sample \mathbb{Z}_p$
+                \item  \quad $\st_i \coloneqq (\tau_i,r_i )$
+                \item \quad $(l_i,k_i) \leftarrow \phfEval(\kappa,\tau_i)$
+                \hfill\comment{$\G_2-\G_3$}
+                \item \quad \pcif $l_i = 0$
+                \hfill\comment{$\G_2-\G_3$}
+                \item \quad \quad \pcthen $\BAD \leftarrow \true$
+                \hfill\comment{$\G_2-\G_3$}
+                \item \quad  $\hat{g_i} \coloneqq g_1^{\frac{1}{d(\tau_i)}}$
+                \item \quad  $R_i \coloneqq g_2^{r_i}$
+                \item  \quad $\hat{R}_i \coloneqq \hat{g}^{r_i}$
+                \item  \quad $\com_i := (\hat{g_i},R_i,\hat{R_i})$
+                \item \quad $ \c_i \sample \mathbb{Z}_p$
+                \item \quad $\s_i = \c_i\cdot d(\tau_i) + r_i$
+                \item \quad $\Q \leftarrow \Q \cup (\tau_i,\com_i,\c_i,\s_i) $
+                \item $(\tau^*, \com^*,\c^*,\s^*)\gets\adv(\pk,\Q)$
+                 \item \quad $(l^*,k^*) \leftarrow \phfEval(\kappa,\tau^*)$
+                \hfill\comment{$\G_2-\G_3$}
+                \item \quad \pcif $l^* \neq 0$
+                \hfill\comment{$\G_2-\G_3$}
+                \item \quad \quad \pcthen $\BAD \leftarrow \true$
+                \hfill\comment{$\G_2-\G_3$}
+        
+                \item \quad \pcif $\BAD$
+                \hfill\comment{$\G_3$}
+                \item \quad \quad \pcthen $\abort$
+                \hfill\comment{$\G_3$}
+
+                \item $\pcif \tau^* \notin \{\tau_1,...,\tau_q\} \land \IDAltV(\sk, \tau^*, \com^*,\c^*,\s^*) = 1$
+                \item $\pcthen \pcreturn 1$
+                \item $\pcelse \pcreturn 0$
+
+            
+            \end{nicodemus}
+        \end{minipage}
+    }
+    \caption{}
+    \label{fig:x-soundess}
+\end{figure}
+
+The $q$-DH adversary $\adv$ receives $d_0,...,d_q$ as inputs where $d_i = g_2^{x^i}$ and simulates the soundness experiment as follows
+\subsection*{Key Generation:} The adversary $\adv$ first chooses random $\tau_1,...,\tau_q$ from $\mathbb{Z}_p$. 
+Now $\adv$ has $g_2$ as $d_0$ and sets 
+$$X \coloneqq d_1 = g_2^x.$$
+Now $\adv$ runs run the following 
+$$(\kappa, \eta)\sample \phfGen(g_2,X)$$
+just like the original key generation algorithm. Then using $\eta$, $\adv$ runs 
+$$(k_i,l_i) \sample \phfEval(\eta,\tau_i)$$
+for every $i \in [1,q]$.
+
+Let $f$ be a univariate polynomial defined as 
+$f(Y) \coloneqq \prod_{i=1}^q (k_i + l_iY)$. Expand $f$ and write $f(Y) = \sum_{i=0}^q \alpha_i Y^i$ where
 $\alpha_0,...,\alpha_q \in \mathbb{Z}_p$ are coefficients of the polynomial $f$. Adversary $\adv$ chooses a random $\theta \in \mathbb{Z}^*_p$, and computes
 $$g_1 \leftarrow \prod_{i=0}^q d_i^{\theta\alpha_i}$$
-which essentially means $g_1 = g^{\theta f(x)}$. $\adv$ can also calculates 
-$X = g_1^x = g^{xf(x)}$ similarly since $Xf(X)$ has a degree equal to $q+1$.
+which essentially means $g_1 = g_2^{\theta f(x)}$. $\adv$ can also calculates 
+$X = g_1^x = g_2^{xf(x)}$ similarly since $Yf(Y)$ has a degree equal to $q+1$.
 \\
-Adversary $\adv$ returns $(g_1,X)$ as the public key to $\fdv$. This is indistinguishable from the normal key generation for $\mathbb{F}$ since $g_1$ is randomly distributed in $\G$ and $X$ is correctly computed.
+Adversary $\adv$ returns $(g_1,g_2,\kappa)$ as the public key to $\fdv$. This is indistinguishable from the normal key generation for $\mathbb{F}$ since $g_1$ is randomly distributed in $\G$.
+
+\subsection*{Transcript Generation:}
+Now adversary $\adv$ has compute $(\com_i,\c_i,\s_i)$ for all $\tau_i$ where $i \in [1,q]$.
+\\
+To do this $\adv$ first computes
+$\hat{g}_i = g_1^{\frac{1}{d(\tau_i)}}$ for $i \in [1,q]$. To do so, let $f_i$ be defined as
+$$f_i(Y) = \frac{f(Y)}{k_i+l_iY} = \prod_{j=1, j \neq i}^q (k_i + l_iY).$$
+As before, we write $f_i$ as 
+$f_i(Y) = \sum_{j=0}^{q-1} \beta_jY^j$ while calculating its coefficient.  Now $\adv$ can compute
+$$\hat{g}_i = \prod_{j=0}^{q-1} d_j^{\theta\beta_j}$$
+hence
+$$\hat{g}_i = g_2^{\theta f_i(x)} = g_1^{\frac{ f_i(x)}{f(x)}}=   g_1^{\frac{1}{d(\tau_i)}}.$$
+
+ Then $\adv$ chooses  $\c_i,\s_i\sample\mathbb{Z}_p$ and computes
+$$R = g_2^{\s_i} \cdot D(\tau)^{-\c_i}$$
+$$ \hat{R} = \hat{g}\cdot g_1^{-\c_i}.$$
+Now $\adv$ returns $(\com_i = (\hat{g},R,\hat{R}),\c_i,\s_i)$ to $\fdv$ and this is indistinguishable from the normal transcript generation for $\fdv$ since if we define $r$ to be $r = \s-\c x$ then $R = g_1^x$ and 
+$\hat{R} = \hat{g}^x$ and also since $\s$ and $\c$ are uniformly distributed in $\mathbb{Z}_p$ so is $r$.
 \end{proof}
+
+\subsection*{Breaking the $q+1$-DH:}
+Eventually forger $\fdv$ returns a forgery $(\tau^*,\com^*,\c^*,\s^*)$ we assume that $\fdv$ wins the game and thus $\tau^* \notin \{\tau_1,...,\tau_q\}$ and 
+$\IDAltV(\sk, \tau^*,\com^*,\c^*,\s^*) = 1$ which means if we parse $\com^*$ as $(\hat{g}^*,R^*,\hat{R}^*)$
+$$\hat{g}^* = g_1^{\frac{1}{d(\tau^*)}} = g_2^{\frac{\theta f(x)}{d(\tau^*)}}$$
+Now we can run 
+$$(k^*,l^*) \sample \phfEval(\kappa, \tau^*)$$
+and long division we can write $f(Y)$ as $f(Y) = (k^*+l^*Y)\alpha(Y) + \beta$  where the coefficients of $\alpha(Y) = \sum_{i=0}^{q-1} \alpha_iY^i$ are easily computable. So we can write $\frac{f(Y)}{k^*+l^*Y}$ as $\alpha(Y) + \frac{\beta}{k^*+l^*Y}$ and 
+$$\hat{g}^* = g_2^{\theta\cdot(\alpha(x) + \frac{\beta}{k^*+l^*x})} \stackrel{(*)}{=} g_2^{\theta\cdot(\alpha(x) + \frac{\beta}{l^*x})}$$
+Where $(*)$ uses that $k^* = 0$ by Game 3.
+Since $k_i +l_iY$ divides $f(Y)$ for all $i\in [1,q]$ and $f(Y)$ has a degree of $q$, $l*Y$ does not divide $f(Y)$ and thus $\beta$ is non zero and $\adv$ can compute
+$$w \leftarrow \Big{(} \hat{g}^{\frac{1}{\theta}} \cdot \prod_{i=0}^{q-1} d_i^{-\alpha_i}\Big{)}^{\frac{1}{l^*\beta}}$$
+Hence,
+$$w =\Big{(} g_1^{\alpha(X)}\cdot g_1^{\frac{\beta}{l^*x}}  \prod_{i=0}^{q-1} d_i^{-\alpha_i}\Big{)}^{\frac{1}l^*{\beta }} = g_1^{\frac{1}{x}}$$
+and return $w$ as the solution to the  $q+1-$DH problem.
+

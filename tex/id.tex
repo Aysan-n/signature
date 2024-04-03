@@ -23,7 +23,7 @@ $$ \IDV(\pk,\com,\c,\s) = 1.$$
 \vspace{2em}
  \fbox{
  \pseudocode{%
- \textbf{ Prover} \< \< \textbf{ Verifier}  \\[0.1\baselineskip][\hline]
+ \textbf{ Prover($\sk,\tau$)} \< \< \textbf{ Verifier($\pk$)}  \\[0.1\baselineskip][\hline]
   \<\< \\[-0.5\baselineskip]
 (\com,\st) \sample \IDP_1(\sk,\tau)
   \< \sendmessageright*{\tau,\com} \< \\[-2ex]
@@ -55,19 +55,19 @@ we have
 $$ \IDAltV(\sk,\tau,\com,\c,\s) = 1.$$
 \end{definition}
 
-\begin{definition}[Alternative Impersonation]
-A canonical tag based identification scheme is said to be $(t,q,\epsilon)-\imp^{\IDAltV}$ secure, if for all adversary $\adv$ running in time at most $t$ we have
-$$\Pr[q\hyph\xsoundness^{\IDAltV}_{\ID}(\adv)]=1] \leq \epsilon.$$
+\begin{definition}[Existential Unforgeablilty against Passive Attacks]
+A dual tag-ID scheme is said to be $(t,q,\epsilon)\hyph \ufpa$ secure, if for all adversary $\adv$ running in time at most $t$ we have
+$$\Pr[q\hyph\xsoundness_{\ID}(\adv)]=1] \leq \epsilon.$$
 \end{definition}
 
-
+Unlike most commonly used identification schemes the canonical tag based ID schemes we use are not Honest Verifier Zero Knowledge (HVZK) and instead have some different soundness property.
 
 \begin{figure}[htb!]
     \centering
     \nicoresetlinenr
     \fbox{
         \begin{minipage}[t]{0.8\textwidth}
-            \underline{$\textbf{Game } q\hyph\xsoundness^{\IDAltV}_{\ID}(\adv)$}
+            \underline{$\textbf{Game } q\hyph\xsoundness_{\ID}(\adv)$}
             \begin{nicodemus}
             	\item $(\sk,\pk)\sample\IDGen$
 		\item $\Q \leftarrow \emptyset$

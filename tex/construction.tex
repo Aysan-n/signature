@@ -1,7 +1,7 @@
 \section{Constructions}
 
-\begin{definition}[Signature scheme] To construct a signature $\Sig \coloneqq (\SigGen, \SigSgn,
-\SigVer )$ from a 3-round tag-based identification scheme  $\ID \coloneqq(\IDGen, \IDP, \IDV)$ we proceed as in Figure 4.
+To construct a signature $\Sig[\ID,\Hash] \coloneqq (\SigGen, \SigSgn,
+\SigVer )$ from a cannonical tag-based identification scheme  $\ID \coloneqq(\IDGen, \IDP, \IDV)$ we proceed as in Figure 4.
 
 \begin{center}
 \begin{figure}[htb!]
@@ -9,7 +9,7 @@
     \fbox{
        
         \begin{minipage}[t]{0.51\textwidth}
-            \underline{$\SigGen(\pms)$:}
+            \underline{$\SigGen$:}
             \begin{nicodemus}
             \item $(\pk_0,\sk_0)\sample\IDGen$
             \item $(\pk_1,\sk_1)\sample\IDGen$
@@ -55,15 +55,8 @@
     \label{fig:prf-security}
 \end{figure}
 \end{center}
-\end{definition}
 
-\begin{definition}[Partially valid signature]
-signature  $\sigma = (\com_{0},\c_{0},\s_{0}, \com_{1}, \c_{1},\s_{1})$ is
-partially valid if $\IDAltV(\pk_0,\com_0,\c_0,\s_0) =1$ or $\IDAltV(\pk_1,\com_1,\c_1,\s_1) = 1$
-not partially valid if 
- $\IDAltV(\pk_0,\com_0,\c_0,\s_0) =0$ and $\IDAltV(\pk_1,\com_1,\c_1,\s_1) =0$.
 
-\end{definition}
 \subsection{Security}
 \begin{figure}[htb!]
     \centering
@@ -160,9 +153,15 @@ not partially valid if
     \caption{}
     \label{fig:x-soundess}
 \end{figure}
+We say the signature  $\sigma = (\com_{0},\c_{0},\s_{0}, \com_{1}, \c_{1},\s_{1})$ is
+partially valid if $\IDAltV(\pk_0,\com_0,\c_0,\s_0) =1$ or $\IDAltV(\pk_1,\com_1,\c_1,\s_1) = 1$
+not partially valid if 
+ $\IDAltV(\pk_0,\com_0,\c_0,\s_0) =0$ and $\IDAltV(\pk_1,\com_1,\c_1,\s_1) =0$.
 \begin{theorem}
-Let  $\ID$ be a unique identification scheme and $\Hash$ be a $(t'',\epsilon'')$ correlation intractable hash function. Suppose there exists a $(t,q,\epsilon)$-forger $\mathcal{F}$ breaking the security of $\Sig_{\ID,\Hash}$ against the existential forgery under the random message attack. Then there exists an adversary that $(t',q,\epsilon')$-breaks the $\imp^{\IDAltV}$ security of $\ID$ with $t' \approx t$ and
-$$ \epsilon' \geq \frac{1}{2}(\epsilon + \epsilon'')$$
+Let  $\ID$ be a unique dual tag-based ID scheme with the uniqueness function $f$ and $\Hash$ be a $(t'',\epsilon'')$ correlation intractable hash function with regards to function $g$ where
+$$g \coloneqq $$
+Suppose there exists a $(t,q,\epsilon)$-forger $\mathcal{F}$ breaking the security of $\Sig_{\ID,\Hash}$ against the existential forgery under the random message attack. Then there exists an adversary that $(t',q,\epsilon')$-breaks the $\imp^{\IDAltV}$ security of $\ID$ with $t' \approx t$ and
+$$ \epsilon \leq \epsilon'' + 2\epsilon'$$
 \end{theorem}
 \begin{proof}
 
@@ -171,7 +170,7 @@ We define the event of Game $\G_i$ winning (returning 1) as $X_i$. Let $(\m_i,\s
 \item [] \textbf{Game 0.} We define Game 0 as the existential unforgeability experiment with forger $\mathcal{F}$ on the signature scheme$\Sig_{\ID,\Hash}$ as shown in Figure 5. By definition, we have
 $$\Pr[X_0] = \epsilon.$$
 \item [] \textbf{Game 1.} In $\G_1$ we check if the signature is partially valid or not and set $\BAD_1$ to $\true$ and $\abort$ if it isn't. Which according to Lemma 1 and $\Hash$ being $(t'',\epsilon'')$ correlation intractable happens with at most $\epsilon''$ probability and so we have 
-$$\Pr[X_1] = \Pr[X_0 \land \neg\BAD_1]  \geq \Pr[X_0] + \epsilon''.$$
+$$\mid \Pr[X_1]  - \Pr[X_0]\mid \leq \epsilon''.$$
 
 \item [] \textbf{Game 2.} In $\G_2$ we pick a random bit $b$ in the beginning of the game and after getting the forged signature $\sigma^*$ which we parse as 
 $$\sigma^* = (\com_0^*,\c_0^*,\s_0^*, \com_1^*, \c_1^*,\s_1^*),$$
@@ -196,9 +195,6 @@ run $\IDGen$ to obtain $\pk_{1-b}$ and
 \\
 It remains to show how $\adv$ can break the alternative impersonation from the forged signature
 $\sigma^* = (\com^*_{0},\c^*_{0},\s^*_{0}, \com^*_{1}, \c^*_{1},\s^*_{1})$ on message $m^*$ output by $\mathcal{F}$. We know that $\IDAltV(\sk_b,m^*,\com^*_b,\c^*_b,\s^*_b) =1$ (by game 2).  So $\adv$ can win the alternative impersonation game by outputting $(\m^*,\com^*_b,\c^*_b,\s^*_b)$.
-\\
-So putting all of this together we have 
-$$\Pr[X_4] = \epsilon' \geq \frac{1}{2}(\epsilon + \epsilon'')$$
 \end{proof}
 
 \begin{lemma}
