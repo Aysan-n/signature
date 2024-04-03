@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.4.25)  29 FEB 2024 14:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.4.25)  28 MAR 2024 15:34
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1051,10 +1051,34 @@ Package: listings 2023/02/27 1.9 (Carsten Heinz)
 )
 (./main.aux
 
+LaTeX Warning: Label `fig:x-soundess' multiply defined.
+
+
+LaTeX Warning: Label `fig:x-soundess@cref' multiply defined.
+
+
+LaTeX Warning: Label `fig:x-soundess' multiply defined.
+
+
+LaTeX Warning: Label `fig:x-soundess@cref' multiply defined.
+
+
 LaTeX Warning: Label `fig:prf-security' multiply defined.
 
 
 LaTeX Warning: Label `fig:prf-security@cref' multiply defined.
+
+
+LaTeX Warning: Label `fig:prf-security' multiply defined.
+
+
+LaTeX Warning: Label `fig:prf-security@cref' multiply defined.
+
+
+LaTeX Warning: Label `fig:x-soundess' multiply defined.
+
+
+LaTeX Warning: Label `fig:x-soundess@cref' multiply defined.
 
 )
 \openout1 = `main.aux'.
@@ -1127,32 +1151,51 @@ LaTeX Font Info:    Trying to load font information for U+stmry on input line 3
 (/usr/local/texlive/2023/texmf-dist/tex/latex/stmaryrd/Ustmry.fd)
 (./tex/preliminaries.tex [1
 
-{/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (16.04993pt too wide) in paragraph at lines 169--170
+{/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]) (./tex
+/id.tex [2] [3]) (./tex/construction.tex
+Overfull \hbox (19.51924pt too wide) in paragraph at lines 53--54
 [][] 
  []
 
-[2] [3] [4] [5]
-Overfull \hbox (25.1365pt too wide) detected at line 277
+[4]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [5]
+[6]
+Overfull \hbox (22.35872pt too wide) detected at line 224
 \OT1/cmss/m/n/10 H\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 pk; Com[]; Com[]\OT1/cmr/m/
 n/10 ) = \OML/cmm/m/it/10 C[] \OT1/cmr/m/n/10 + \OML/cmm/m/it/10 C[] \OT1/cmr/m
 /n/10 = \OML/cmm/m/it/10 f\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 pk[]; Com[]\OT1/cmr
 /m/n/10 ) + \OML/cmm/m/it/10 f\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 pk[]; Com[]\OT1
 /cmr/m/n/10 ) = \OML/cmm/m/it/10 g\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 pk; Com[]; 
-Com[]\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 :
+Com[]\OT1/cmr/m/n/10 )
  []
 
-
-LaTeX Font Warning: Command \small invalid in math mode on input line 339.
-
-
-Overfull \hbox (16.04993pt too wide) in paragraph at lines 339--340
+[7]) (./tex/q-sdh.tex
+Overfull \hbox (16.04993pt too wide) in paragraph at lines 66--67
  [][] 
  []
 
-)
+[8]
+
+LaTeX Font Warning: Font shape `U/stmry/b/n' undefined
+(Font)              using `U/stmry/m/n' instead on input line 108.
+
+[9]) (./tex/q-dh.tex
+Overfull \hbox (16.04993pt too wide) in paragraph at lines 62--63
+ [][] 
+ []
+
+[10] [11]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [12]
+[13])
 No file main.bbl.
-[6] [7] (./main.axp) (./main.aux)
+[14] (./main.axp) (./main.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -1160,43 +1203,46 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 715BA68134B0964F4D3CE605DA7865B1;154.
  ) 
 Here is how much of TeX's memory you used:
- 30093 strings out of 476025
- 549320 string characters out of 5790017
- 1885388 words of memory out of 5000000
- 49907 multiletter control sequences out of 15000+600000
- 526649 words of font info for 85 fonts, out of 8000000 for 9000
+ 30305 strings out of 476025
+ 551258 string characters out of 5790017
+ 1906388 words of memory out of 5000000
+ 49946 multiletter control sequences out of 15000+600000
+ 527315 words of font info for 89 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 122i,28n,121p,536b,1642s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 122i,28n,121p,821b,1642s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></
-usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb><
-/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></
-usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></u
-sr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr
-/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/l
-ocal/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/loc
-al/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local
-/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/t
-exlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texl
-ive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive
-/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/20
-23/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2023/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/local/texlive/2023/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/2023/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmss9.pfb></usr/local/texlive/2023/texmf
--dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2023/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2023/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2023/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2023/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2023/texmf-dist/font
-s/type1/public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2023/texmf-dist/fonts/
+usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></u
+sr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></us
+r/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/
+local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/lo
+cal/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/loca
+l/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/
+texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/
+texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/te
+xlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texli
+ve/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/
+2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/202
+3/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2023/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/local/texlive/2023/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/2023/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmss9.pfb></usr/local/texlive/2023/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2023/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2023/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2023/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2023/texmf-dist/font
+s/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2023/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmti7.pfb></usr/local/texlive/2023/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2023/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type
+1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2023/texmf-dist/fonts/
 type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (7 pages, 305996 bytes).
+Output written on main.pdf (14 pages, 391320 bytes).
 PDF statistics:
- 290 PDF objects out of 1000 (max. 8388607)
- 226 compressed objects within 3 object streams
- 100 named destinations out of 1000 (max. 500000)
+ 523 PDF objects out of 1000 (max. 8388607)
+ 444 compressed objects within 5 object streams
+ 260 named destinations out of 1000 (max. 500000)
  21 words of extra memory for PDF output out of 10000 (max. 10000000)
 
