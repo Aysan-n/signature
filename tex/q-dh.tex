@@ -1,5 +1,5 @@
 \section{Instantiation of dual tag ID from q-DH}
-We describe the identification scheme as in figure 5.
+We describe the identification scheme as in figure 7.
 Throughout this section we will write $D(\tau)$ shorthand for 
 $\phfEval(\kappa,\tau)$ and $d(\tau)$ shorthand for the function computing
 $(a,b) \leftarrow \phfTE(\eta,\tau)$ and returning $ax+b$.
@@ -71,11 +71,41 @@ where
 $g \sample \G$ and $x \sample \mathbb{Z}_p^*$.
 We require that the $q$-DH assumption holds meaning that no adversary can $(t, \epsilon)$ break the $q$-DH problem for a polynomial $t$ and a non-negligible $\epsilon$.
 \end{definition}
+\begin{lemma}
+	Let $\phf$ be a $(m,n, \lambda, \delta)$-programmable hash function and 
+	$$(\kappa, \eta)\sample \phfGen(g,X)$$
+	and $\tau_1,...,\tau_q \in \mathbb{Z}_p$ be such that
+	$(k_i,l_i) \sample \phfEval(\eta,\tau_i)$.
+	We define the polynomial $f$ as 
+	$$f(Y) \coloneqq \prod_{i=1}^q (k_i + l_iY).$$
+	Given $\{g^{x^i}\}_{i=0,...,q}$, let us define $g_1 = g^{\theta f(x)}$. For any $\tau_i$ where $i \in [0,q]$ it is easy to compute $g_1^\frac{1}{d(\tau_i) }$. Furthurmore if $k_i \neq 0$ for all $i \in [0,q]$, given 
+	$g_1^\frac{1}{d(\tau^*) }$ where $\tau \notin \{\tau_1,...,\tau_q\}$ and $(k^*,l^*) \sample \phfEval(\kappa, \tau^*)$ one can easily compute $g^\frac{1}{d(\tau^*)}$.
+	
+\end{lemma}
+
+\begin{proof}
+	To compute $g_1^{\frac{1}{d(\tau_i)}}$ for $i \in [1,q]$, let $f_i$ be defined as
+	$$f_i(Y) = \frac{f(Y)}{k_i+l_iY} = \prod_{j=1, j \neq i}^q (k_i + l_iY).$$
+	We can write $f_i$ as 
+	$f_i(Y) = \sum_{j=0}^{q-1} \beta_jY^j$ while calculating its coefficient.  Now if we denote $g^{x^j}$ by $d_j$ we can calculate
+	$$\hat{g}_i = \prod_{j=0}^{q-1} d_j^{\theta\beta_j}$$
+	hence
+	$$\hat{g}_i = g^{\theta f_i(x)} = g_1^{\frac{ f_i(x)}{f(x)}}=   g_1^{\frac{1}{d(\tau_i)}}.$$
+	Now to compute $g^\frac{1}{d(\tau^*)}$ by long division we can write $f(Y)$ as 
+	$$f(Y) = (k^*+l^*Y)\alpha(Y) + \beta$$
+	where the coefficients of $\alpha(Y) = \sum_{i=0}^{q-1} \alpha_iY^i$ are easily computable. So we can write $\frac{f(Y)}{k^*+l^*Y}$ as $\alpha(Y) + \frac{\beta}{k^*+l^*Y}$ and so we have
+	$$\hat{g} = g_1^{\frac{1}{d(\tau^*)}} =g^{\frac{\theta f(x)}{d(\tau^*)}}=g^{\frac{\theta f(x)}{k^* + l^*x}} = g^{\theta\cdot(\alpha(x) + \frac{\beta}{k^*+l^*x})} $$
+	Since $k_i +l_iY$ divides $f(Y)$ for all $i\in [1,q]$ and $f(Y)$ has a degree of $q$ and $k_i \neq 0$, $l^*Y$ does not divide $f(Y)$ and thus $\beta$ is non zero and we can compute
+	$$w \leftarrow \Big{(} \hat{g}^{\frac{1}{\theta}} \cdot \prod_{i=0}^{q-1} d_i^{-\alpha_i}\Big{)}^{\frac{1}{\beta}}$$
+	Hence, we have computed
+	$$w  = g^{\frac{1}{k^*+l^*x}} = g^\frac{1}{d(\tau^*)}.$$
+	
+\end{proof}
 
 
 \begin{theorem}
-Suppose that there exists a $(t, q, \epsilon)$-forger $\fdv$ breaking the $\imp^{\IDAltV}$ of the $\ID_{q-\text{DH}}$ identification scheme. Then there exists an adversary $\adv$ that $(t',q+1,\epsilon')-$ breaks the $q+1$-SDH assumption with $t \approx t'$ and 
-$\epsilon' \geq ?.$
+Suppose that there exists a $(t, q, \epsilon)$-forger $\fdv$ breaking the $\imp^{\IDAltV}$ of the $\ID_{q-\text{DH}}$ identification scheme. Then there exists an adversary $\adv$ that $(t',q+1,\epsilon')-$ breaks the $q+1$-DH assumption with $t \approx t'$ and 
+$\epsilon' \geq \epsilon.$
 \end{theorem}
 \begin{proof}
 We define the event of Game $\G_i$ winning (returning 1) as $X_i$. Let $\tau_i$ denote the $i$-th random tag in the alternative impersonation game. Let $(\tau^*,\com^*, \c^*, \s^*)$ be the forgery output by $\mathcal{F}$.
@@ -159,6 +189,8 @@ $$\Pr[X_3] = \Pr[X_2 \land \neg \abort] \geq \delta \cdot \Pr[X_2]$$
 \end{figure}
 
 The $q$-DH adversary $\adv$ receives $d_0,...,d_q$ as inputs where $d_i = g_2^{x^i}$ and simulates the soundness experiment as follows
+\subsection*{Key Generation:}
+Adversary $\adv$ first chooses random $\tau_1,...,\tau_q$ from $\mathbb{Z}_p$. 
 \subsection*{Key Generation:} The adversary $\adv$ first chooses random $\tau_1,...,\tau_q$ from $\mathbb{Z}_p$. 
 Now $\adv$ has $g_2$ as $d_0$ and sets 
 $$X \coloneqq d_1 = g_2^x.$$
@@ -167,12 +199,11 @@ $$(\kappa, \eta)\sample \phfGen(g_2,X)$$
 just like the original key generation algorithm. Then using $\eta$, $\adv$ runs 
 $$(k_i,l_i) \sample \phfEval(\eta,\tau_i)$$
 for every $i \in [1,q]$.
-
-Let $f$ be a univariate polynomial defined as 
-$f(Y) \coloneqq \prod_{i=1}^q (k_i + l_iY)$. Expand $f$ and write $f(Y) = \sum_{i=0}^q \alpha_i Y^i$ where
-$\alpha_0,...,\alpha_q \in \mathbb{Z}_p$ are coefficients of the polynomial $f$. Adversary $\adv$ chooses a random $\theta \in \mathbb{Z}^*_p$, and computes
-$$g_1 \leftarrow \prod_{i=0}^q d_i^{\theta\alpha_i}$$
-which essentially means $g_1 = g_2^{\theta f(x)}$. $\adv$ can also calculates 
+\\
+$\adv$ computes $g_1$ as in Lemma 3, such that
+$$g_1 = g_2^{\theta f(x)}.$$
+\\
+$\adv$ can also calculates 
 $X = g_1^x = g_2^{xf(x)}$ similarly since $Yf(Y)$ has a degree equal to $q+1$.
 \\
 Adversary $\adv$ returns $(g_1,g_2,\kappa)$ as the public key to $\fdv$. This is indistinguishable from the normal key generation for $\mathbb{F}$ since $g_1$ is randomly distributed in $\G$.
@@ -180,64 +211,28 @@ Adversary $\adv$ returns $(g_1,g_2,\kappa)$ as the public key to $\fdv$. This is
 \subsection*{Transcript Generation:}
 Now adversary $\adv$ has compute $(\com_i,\c_i,\s_i)$ for all $\tau_i$ where $i \in [1,q]$.
 \\
-To do this $\adv$ first computes
-$\hat{g}_i = g_1^{\frac{1}{d(\tau_i)}}$ for $i \in [1,q]$. To do so, let $f_i$ be defined as
-$$f_i(Y) = \frac{f(Y)}{k_i+l_iY} = \prod_{j=1, j \neq i}^q (k_i + l_iY).$$
-As before, we write $f_i$ as 
-$f_i(Y) = \sum_{j=0}^{q-1} \beta_jY^j$ while calculating its coefficient.  Now $\adv$ can compute
-$$\hat{g}_i = \prod_{j=0}^{q-1} d_j^{\theta\beta_j}$$
-hence
-$$\hat{g}_i = g_2^{\theta f_i(x)} = g_1^{\frac{ f_i(x)}{f(x)}}=   g_1^{\frac{1}{d(\tau_i)}}.$$
-
- Then $\adv$ chooses  $\c_i,\s_i\sample\mathbb{Z}_p$ and computes
+According to Lemma 2 $\adv$ can compute $\hat{g}_i = g_1^{\frac{1}{d(\tau_i)}}$.
+\\
+To complete the computation $\adv$ chooses  $\c_i,\s_i\sample\mathbb{Z}_p$ and computes
 $$R = g_2^{\s_i} \cdot D(\tau)^{-\c_i}$$
-$$ \hat{R} = \hat{g}\cdot g_1^{-\c_i}.$$
-Now $\adv$ returns $(\com_i = (\hat{g},R,\hat{R}),\c_i,\s_i)$ to $\fdv$ and this is indistinguishable from the normal transcript generation for $\fdv$ since if we define $r$ to be $r = \s-\c x$ then $R = g_1^x$ and 
+$$ \hat{R} = \hat{g_i}\cdot g_1^{-\c_i}.$$
+Now $\adv$ returns $(\com_i = (\hat{g_i},R,\hat{R}),\c_i,\s_i)$ to $\fdv$ and this is indistinguishable from the normal transcript generation for $\fdv$ since if we define $r$ to be $r = \s-\c x$ then $R = g_1^x$ and 
 $\hat{R} = \hat{g}^x$ and also since $\s$ and $\c$ are uniformly distributed in $\mathbb{Z}_p$ so is $r$.
 \end{proof}
 
 \subsection*{Breaking the $q+1$-DH:}
 Eventually forger $\fdv$ returns a forgery $(\tau^*,\com^*,\c^*,\s^*)$ we assume that $\fdv$ wins the game and thus $\tau^* \notin \{\tau_1,...,\tau_q\}$ and 
 $\IDAltV(\sk, \tau^*,\com^*,\c^*,\s^*) = 1$ which means if we parse $\com^*$ as $(\hat{g}^*,R^*,\hat{R}^*)$
-$$\hat{g}^* = g_1^{\frac{1}{d(\tau^*)}} = g_2^{\frac{\theta f(x)}{d(\tau^*)}}$$
-Now we can run 
-$$(k^*,l^*) \sample \phfEval(\kappa, \tau^*)$$
-and long division we can write $f(Y)$ as $f(Y) = (k^*+l^*Y)\alpha(Y) + \beta$  where the coefficients of $\alpha(Y) = \sum_{i=0}^{q-1} \alpha_iY^i$ are easily computable. So we can write $\frac{f(Y)}{k^*+l^*Y}$ as $\alpha(Y) + \frac{\beta}{k^*+l^*Y}$ and 
-$$\hat{g}^* = g_2^{\theta\cdot(\alpha(x) + \frac{\beta}{k^*+l^*x})} \stackrel{(*)}{=} g_2^{\theta\cdot(\alpha(x) + \frac{\beta}{l^*x})}$$
-Where $(*)$ uses that $k^* = 0$ by Game 3.
-Since $k_i +l_iY$ divides $f(Y)$ for all $i\in [1,q]$ and $f(Y)$ has a degree of $q$, $l*Y$ does not divide $f(Y)$ and thus $\beta$ is non zero and $\adv$ can compute
-$$w \leftarrow \Big{(} \hat{g}^{\frac{1}{\theta}} \cdot \prod_{i=0}^{q-1} d_i^{-\alpha_i}\Big{)}^{\frac{1}{l^*\beta}}$$
-Hence,
-$$w =\Big{(} g_1^{\alpha(X)}\cdot g_1^{\frac{\beta}{l^*x}}  \prod_{i=0}^{q-1} d_i^{-\alpha_i}\Big{)}^{\frac{1}l^*{\beta }} = g_1^{\frac{1}{x}}$$
-and return $w$ as the solution to the  $q+1-$DH problem.
+$$\hat{g}^* = g_1^{\frac{1}{d(\tau^*)}} $$
+will hold.
+\\
+According to Lemma 3, $\adv$ can now compute 
+$$g^\frac{1}{d(\tau^*)} = g^\frac{1}{k^*+l^*x}  \stackrel{(*)}{=} g^\frac{1}{l^*x}$$
+where
+$$w:=(k^*,l^*) \sample \phfEval(\kappa, \tau^*)$$
+and $(*)$ uses that $k^* = 0$ by Game 3.
+\\
+Ultimately, $\adv$ can compute
+$w^{l^*} = g^\frac{1}{x}$ 
+and return it as the solution to the $q+1-$DH problem.
 
-\begin{lemma}
-	Let $\phf$ be a $(m,n, \lambda, \delta)$-programmable hash function and 
-	$$(\kappa, \eta)\sample \phfGen(g,X)$$
-	and $\tau_1,...,\tau_q \in \mathbb{Z}_p$ be such that
-	$(k_i,l_i) \sample \phfEval(\eta,\tau_i)$.
-	We define the polynomial $f$ as 
-	$$f(Y) \coloneqq \prod_{i=1}^q (k_i + l_iY).$$
-	Given $\{g^{x^i}\}_{i=0,...,q}$, let us define $g_1 = g^{\theta f(x)}$. For any $\tau_i$ where $i \in [0,q]$ it is easy to compute $g_1^\frac{1}{d(\tau_i) }$. Furthurmore if $k_i \neq 0$ for all $i \in [0,q]$, given 
-	$g_1^\frac{1}{d(\tau^*) }$ where $\tau \notin \{\tau_1,...,\tau_q\}$ and $(k^*,l^*) \sample \phfEval(\kappa, \tau^*)$ where $k^* \neq 0$ one can easily compute $g^\frac{1}{d(\tau^*)}$.
-
-\end{lemma}
-
-\begin{proof}
-	To compute $g_1^{\frac{1}{d(\tau_i)}}$ for $i \in [1,q]$, let $f_i$ be defined as
-	$$f_i(Y) = \frac{f(Y)}{k_i+l_iY} = \prod_{j=1, j \neq i}^q (k_i + l_iY).$$
-	We can write $f_i$ as 
-	$f_i(Y) = \sum_{j=0}^{q-1} \beta_jY^j$ while calculating its coefficient.  Now if we denote $g^{x^j}$ by $d_j$ we can calculate
-	$$\hat{g}_i = \prod_{j=0}^{q-1} d_j^{\theta\beta_j}$$
-	hence
-	$$\hat{g}_i = g^{\theta f_i(x)} = g_1^{\frac{ f_i(x)}{f(x)}}=   g_1^{\frac{1}{d(\tau_i)}}.$$
-	Now to compute $g^\frac{1}{d(\tau^*)}$ by long division we can write $f(Y)$ as 
-	$$f(Y) = (k^*+l^*Y)\alpha(Y) + \beta$$
-	  where the coefficients of $\alpha(Y) = \sum_{i=0}^{q-1} \alpha_iY^i$ are easily computable. So we can write $\frac{f(Y)}{k^*+l^*Y}$ as $\alpha(Y) + \frac{\beta}{k^*+l^*Y}$ and so we have
-	$$\hat{g} = g_1^{\frac{1}{d(\tau^*)}} =g^{\frac{\theta f(x)}{d(\tau^*)}}=g^{\frac{\theta f(x)}{k^* + l^*x}} = g^{\theta\cdot(\alpha(x) + \frac{\beta}{k^*+l^*x})} $$
-	Since $k_i +l_iY$ divides $f(Y)$ for all $i\in [1,q]$ and $f(Y)$ has a degree of $q$ and $k_i \neq 0$, $l^*Y$ does not divide $f(Y)$ and thus $\beta$ is non zero and we can compute
-	$$w \leftarrow \Big{(} \hat{g}^{\frac{1}{\theta}} \cdot \prod_{i=0}^{q-1} d_i^{-\alpha_i}\Big{)}^{\frac{1}{\beta}}$$
-	Hence, we have computed
-	$$w  = g^{\frac{1}{k^*+l^*x}} = g^\frac{1}{d(\tau^*)}.$$
-	
-\end{proof}

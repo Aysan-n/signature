@@ -85,45 +85,30 @@ $\epsilon' \geq \epsilon.$
 \end{theorem}
 \begin{proof}
 The $q$-SDH adversary $\adv$ receives $d_0,...,d_q$ as inputs where $d_i = g^{x^i}$ and simulates the $q$-SDH experiment as follows
-\subsection*{Key Generation:} The adversary $\adv$ first chooses random $\tau_1,...,\tau_q$ from $\mathbb{Z}_p$. Let $f$ be a univariate polynomial defined as 
-$f(X) = \prod_{i=1}^q (X+\tau_i)$. Expand $f$ and write $f(X) = \sum_{i=0}^q \alpha_i X^i$ where
-$\alpha_0,...,\alpha_q \in \mathbb{Z}_p$ are coefficients of the polynomial $f$. Adversary $\adv$ chooses a random $\theta \in \mathbb{Z}^*_p$, and computes
-$$g_1 \leftarrow \prod_{i=0}^q d_i^{\theta\alpha_i}$$
-which essentially means $g_1 = g^{\theta f(x)}$. $\adv$ can also calculates 
+\subsection*{Key Generation:} 
+Adversary $\adv$ first chooses random $\tau_1,...,\tau_q$ from $\mathbb{Z}_p$. Now $\adv$ defines $g_1 = g^{\theta f(x)}$ as in Lemma 2. $\adv$ can also calculates 
 $X = g_1^x = g^{xf(x)}$ similarly since $Xf(X)$ has a degree equal to $q+1$.
 \\
 Adversary $\adv$ returns $(g_1,X)$ as the public key to $\fdv$. This is indistinguishable from the normal key generation for $\mathbb{F}$ since $g_1$ is randomly distributed in $\G$ and $X$ is correctly computed.
 
 \subsection*{Transcript Generation:}
-Now adversary $\adv$ compute $(\com_i,\c_i,\s_i)$ for $\tau_i$.
+Now adversary $\adv$ must compute $(\com_i,\c_i,\s_i)$ for $\tau_i$.
 \\
-$\adv$ computes
-$\hat{g}_i = g_1^{\frac{1}{x+\tau_i}}$ for $i = 1,..,q$. To do so, let $f_i$ be defined as
-$$f_i(X) = \frac{f_i(X)}{X+\tau_i} = \prod_{j=1, j \neq i}^q (X+ \tau_j).$$
-As before, we write $f_i$ as 
-$f_i(X) = \sum_{j=0}^{q-1} \beta_jX^j$ while calculating its coefficient.  Now $\adv$ can compute
-$$\hat{g}_i = \prod_{j=0}^{q-1} d_j^{\theta\beta_j}$$
-hence
-$$\hat{g}_i = g^{\theta f_i(X)} =  g_1^{\frac{1}{x+\tau_i}}.$$
-
-
-
-
- Then $\adv$ chooses  $\c_i,\s_i\sample\mathbb{Z}_p$ and computes
+According to Lemma 2 $\adv$ can compute $\hat{g}_i = g_1^{\frac{1}{x+\tau_i}}$.
+\\
+To complete the computation $\adv$ chooses  $\c_i,\s_i\sample\mathbb{Z}_p$ and computes
 $$R = g_1^{\s_i }\cdot(X\cdot g_1^{\tau})^{-\c_i} $$
 $$\hat{R} = \hat{g}^\s_i \cdot (g\cdot \hat{g}^{-\tau} )^\c_i.$$
-Now $\adv$ returns $(\com_i = (\hat{g},R,\hat{R}),\c_i,\s_i)$ to $\fdv$ and this is indistinguishable from the normal transcript generation for $\fdv$ since if we define $r$ to be $r = \s-\c x$ then $R = g_1^x$ and 
-$\hat{R} = \hat{g}^x$ and also since $\s$ and $\c$ are uniformly distributed in $\mathbb{Z}_p$ so is $r$.
+Now $\adv$ returns $(\com_i = (\hat{g_i},R,\hat{R}),\c_i,\s_i)$ to $\fdv$ and this is indistinguishable from the normal transcript generation for $\fdv$ since if we define $r$ to be $r = \s-\c x$ then $R = g_1^x$ and 
+$\hat{R} = \hat{g}^x$. Additionally since $\s$ and $\c$ are uniformly distributed in $\mathbb{Z}_p$ so is $r$.
 \subsection*{Breaking the $q+1$-SDH:}
 Eventually forger $\fdv$ returns a forgery $(\tau^*,\com^*,\c^*,\s^*)$ we assume that $\fdv$ wins the game and thus $\tau^* \notin \{\tau_1,...,\tau_q\}$ and 
-$\IDAltV(\sk, \tau^*,\com^*,\c^*,\s^*) = 1$ which means if we parse $\com^*$ as $(\hat{g}^*,R^*,\hat{R}^*)$
-$$\hat{g} = g_1^{\frac{1}{x+\tau^*}} = g^{\frac{\theta f(x)}{x+\tau^*}}$$
-Using long division we can write $f(X)$ as $f(X) = (X+\tau^*)\alpha(X) + \beta$  where the coefficients of $\alpha(X) = \sum_{i=0}^{q-1} \alpha_iX^i$ are easily computable. So we can write $\frac{f(X)}{X+\tau^*}$ as $\alpha(X) + \frac{\beta}{X+\tau^*}$ and 
-$$\hat{g} = g^{\theta\cdot(\alpha(X) + \frac{\beta}{X+\tau^*})}.$$
-Since $\{\tau_1,...,\tau_q\}$ are the set of roots for $f(X)$ and $\tau^*$ is not in this set $X+\tau^*$ does not divide $f(X)$ and so $\beta \neq 0$. Now adversary $\adv$ can compute
-$$w \leftarrow \Big{(} \hat{g}^{\frac{1}{\theta}} \cdot \prod_{i=0}^{q-1} d_i^{-\alpha_i}\Big{)}^{\frac{1}{\beta}}$$
-Hence,
-$$w =\Big{(} g_1^{\alpha(X)}\cdot g_1^{\frac{\beta}{x+\tau^*}}  \prod_{i=0}^{q-1} d_i^{-\alpha_i}\Big{)}^{\frac{1}{\beta}} = g_1^{\frac{1}{x+\tau^*}}.$$
-Adversary $\adv$ returns the pair $(\tau^*, w)$ as the solution to the $q+1-$SDH problem.
+$\IDAltV(\sk, \tau^*,\com^*,\c^*,\s^*) = 1$ which means if we parse $\com^*$ as $(\hat{g}^*,R^*,\hat{R}^*)$ 
+$$\hat{g}^* = g_1^{\frac{1}{x+\tau^*}} = g^{\frac{\theta f(x)}{x+\tau^*}}$$
+will hold.
+\\
+According to Lemma 2, $\adv$ can compute 
+$ g^{\frac{1}{x+ \tau^*}}$
+and ultimately return the pair $(\tau^*, g^{\frac{1}{x+ \tau^*}})$ as the solution to the $q+1-$SDH problem.
 
 \end{proof}  
