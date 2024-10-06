@@ -23,9 +23,12 @@
 
 A digital signature scheme consists of three algorithms $(\SigGen, \SigSgn, \SigVer)$. A key generation algorithm $\SigGen$, a signing algorithm $\SigSgn$ and a verification algorithm $\SigVer$. $\SigGen$ is a randomised algorithm that produces a random key pair consisting of a public key $\pk$ and a secret key $\sk$. The probabilistic signing algorithm $\SigSgn$ requires a secret key and a message from the message space $\mathsf{M}$ and produces a signature $\sigma$. Finally, the verification algorithm $\SigVer$ takes a public key, a message and a signature as input and returns either 0/reject or 1/accept. A signature scheme is called correct, if every signature on a message generated with a secret key is accepted under the corresponding public key.
 
-\begin{definition}[RMA security]
+\begin{definition}[RMA security]\label{def:rma}
 A signature scheme $\Pi = (\SigGen, \SigSgn, \SigVer)$ is said to be $(t,q,\epsilon)$-secure against existential forgery under the random message attack (EUF-RMA), if for all adversary $\adv$ running in time at most $t$ we have
-$$\Pr[q\hyph\rma_{\Pi}(\adv)]=1] \leq \epsilon.$$
+$$\Pr[q\hyph\rma_{\Pi}(\adv)]=1] \leq \epsilon$$
+where $q\hyph\rma_{\Pi}$ is depicted in \autoref{fig:rma}.
+
+
 We say $\adv$, $(t,q,\epsilon)$-breaks the EUF-RMA security of the signature if
 $$\Pr[q\hyph\rma_{\Pi}(\adv)=1] > \epsilon$$
 \end{definition}
@@ -34,6 +37,7 @@ $$\Pr[q\hyph\rma_{\Pi}(\adv)=1] > \epsilon$$
 
 \begin{figure}[htb!]
     \centering
+    
     \nicoresetlinenr
     \fbox{
         \begin{minipage}[t]{0.8\textwidth}
@@ -45,21 +49,21 @@ $$\Pr[q\hyph\rma_{\Pi}(\adv)=1] > \epsilon$$
                 \item \quad $ \m_i \sample \mathsf{M}$
                 \item \quad $\sigma_i \sample \SigSgn(\sk,\m_i)$
                 \item \quad $\Q \leftarrow \Q \cup (m_i,\sigma_i) $
-                \item $(\m*, \sigma^*)\gets\adv(\pk,\Q)$
-                \item $\pcif \SigVer(\pk,\m^*,\sigma^*) = 1 \land m^* \notin \{m_1,..,m_q\}  \pcthen \pcreturn 1$
+                \item $(\m^*, \sigma^*)\gets\adv(\pk,\Q)$
+                \item $\pcif \SigVer(\pk,\m^*,\sigma^*) = 1 \land m^* \notin \{m_1,...,m_q\}  \pcthen \pcreturn 1$
                 \item $\pcelse \pcreturn 0$
             \end{nicodemus}
         \end{minipage}
     }
     \caption{}
-    \label{fig:x-soundess}
+    \label{fig:rma}
 \end{figure}
 
 
 
 \subsection{Hash Functions}
-
-Let $\mathbb{G}= (\G_k)$ be a family of groups, indexed by the security parameter $k \in \mathbb{N}$. We omit the subscript when the reference to the security parameter is clear, thus write $\G$ for $\G_k$.
+\aysan{Fix hash function dfinition.}
+Let $\mathbb{G}= (\G_k)$ be a family of groups, indexed by the security parameter $k \in \mathbb{N}$ (we omit the subscript when the reference to the security parameter is clear, thus write $\G$ for $\G_k$).
 \\
 A \textit{group hash function} $\Hash$  over $\G$ with input length $l =l(k)$ consists of two efficient algorithms $\phfGen$ and $\phfEval$. The probabilistic algorithm 
 $\kappa \sample \phfGen(1^k)$ generates a hash key $\kappa$ for the security parameter $k$. Algorithm 

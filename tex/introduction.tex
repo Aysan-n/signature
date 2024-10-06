@@ -1,0 +1,23 @@
+\section{Introduction}\label{sec:intro}
+	Digital Signatures are one of the most important primitives in cryptography. They are used as building blocks in many high level protocols. The security of signatures can be proven in Eeither the Standard Model or the Random Oracle Model.Signatures in the Standard Model are usually less efficient and practical than the ones in the Random Oracle Model.
+	
+	
+	One of the ways of obtaining an signature is via the Fiat-Shamir transform. In this transform you use an identity scheme and hash the commitment so that the resulting signature is secure in the random oracle model. The problem is that schemes that are secure in the Random Oracle model are not necessarily secure in the real world, therefore it is valuable to have signatures that are secure in the Standard Model. A technique known as OR-Proofs are sometimes used to prove the tight security in this model.
+	
+	 Although there discrete logarithm based signatures in the standard model, most use pairings and there are relatively few pairing free ones. Correlation Interactable Hash functions have been recently used to achieve signatures in the Standard Model.
+	 
+	 Correlation Interactable hash functions first introduced by Canetti et al. are hash functions in which it is difficult to find an input that has a fixed non-common relationship with the output of that hash function. A Random Oracle clearly fits into this definition. Unlike Random Oracles, Correlation Interactable hash functions actually exist in the real world.
+	 
+	 
+	 Our paper offers a generalized construction that uses a transform similar to Fiat-Shamir while borrowing ideas from the OR-proof techniques but doesn't rely on the hash function being a Random Oracle for security. Our scheme instead relies on Correlation Interactable hash functions.
+	 
+	 
+
+	 
+	 \subsection{Contributions}
+	 
+	 We first introduce a Dual Tag Identification Scheme in Section 3. This Tag Based Identification Sheme has an additional verification called the Alternative Verification which unlike the "normal" verification uses the secret key to verify if a transcript could have been created by an honest prover. Then we introduce an unforgeability notion called ??. This unforgeability notion implies that an adversary cannot come up with a new transcript that verifies with the alternative verification after seeing instances of the transcript. It is important to note that this Identification Scheme is not Honest Verifier Zero Knowledge in opposed to many common schemes.
+	 
+	 In Section 4, we introduce our signature scheme which runs the identification scheme two times  and aggregates their commitments similar to an OR proof. We then go on to show that if the underlying Identification Scheme has the desirable properties then the resulting Signature Scheme is secure under the Random Message Attack which can be extended to be secure against the Chosen Message Attack using Chameleon Hashing.
+	 
+	 In Section 5 and 6 we show an instantiations of the mentioned Identification Scheme based on the $q$-SDH and $q$-DH assumptions respectively. The construction is Section 5 is based on an extension of the EDL Scheme shown by Chevallier-Mames and the construction in the Section 6 is an extension of section 5 using programmable hash functions introduces by Kilts et al. to adapt a well known lemma.

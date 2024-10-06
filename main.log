@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2022.4.3)  2 SEP 2024 17:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2022.4.3)  7 OCT 2024 00:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1046,12 +1046,6 @@ LaTeX Warning: Label `fig:x-soundess' multiply defined.
 LaTeX Warning: Label `fig:x-soundess@cref' multiply defined.
 
 
-LaTeX Warning: Label `fig:x-soundess' multiply defined.
-
-
-LaTeX Warning: Label `fig:x-soundess@cref' multiply defined.
-
-
 LaTeX Warning: Label `fig:prf-security' multiply defined.
 
 
@@ -1137,36 +1131,37 @@ LaTeX Info: Redefining \nameref on input line 30.
 \openout6 = `main.axp'.
 
 \c@lstlisting=\count409
-LaTeX Font Info:    Trying to load font information for U+msa on input line 34.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 33.
 
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 34.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 33.
 
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Trying to load font information for U+stmry on input line 3
-4.
+3.
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/stmaryrd/Ustmry.fd)
-(./tex/preliminaries.tex [1
+(./tex/introduction.tex [1
 
 {/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]) (./tex
-/id.tex [2] [3]) (./tex/construction.tex
-Overfull \hbox (19.51924pt too wide) in paragraph at lines 53--54
+/preliminaries.tex [2] [3]) (./tex/id.tex [4])
+(./tex/construction.tex [5]
+Overfull \hbox (19.51924pt too wide) in paragraph at lines 54--55
 [][] 
  []
 
-[4]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [5]
 [6]
-Overfull \hbox (22.35872pt too wide) detected at line 224
+Underfull \vbox (badness 7397) has occurred while \output is active []
+
+ [7]
+[8]
+Overfull \hbox (22.35872pt too wide) detected at line 195
 \OT1/cmss/m/n/10 H\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 pk; Com[]; Com[]\OT1/cmr/m/
 n/10 ) = \OML/cmm/m/it/10 C[] \OT1/cmr/m/n/10 + \OML/cmm/m/it/10 C[] \OT1/cmr/m
 /n/10 = \OML/cmm/m/it/10 f\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 pk[]; Com[]\OT1/cmr
@@ -1175,26 +1170,31 @@ n/10 ) = \OML/cmm/m/it/10 C[] \OT1/cmr/m/n/10 + \OML/cmm/m/it/10 C[] \OT1/cmr/m
 Com[]\OT1/cmr/m/n/10 )
  []
 
-[7]) (./tex/q-sdh.tex
+) (./tex/q-sdh.tex [9]
 Overfull \hbox (16.04993pt too wide) in paragraph at lines 75--76
  [][] 
  []
 
-[8]
+[10]
 
 LaTeX Font Warning: Font shape `U/stmry/b/n' undefined
 (Font)              using `U/stmry/m/n' instead on input line 104.
 
-[9]) (./tex/q-dh.tex
+) (./tex/q-dh.tex
 Overfull \hbox (16.04993pt too wide) in paragraph at lines 62--63
  [][] 
  []
 
-[10] [11] [12]
-Underfull \vbox (badness 3343) has occurred while \output is active []
+[11] [12]
+Overfull \hbox (12.96661pt too wide) in paragraph at lines 185--186
+[][] 
+ []
 
- [13])
-(./main.bbl) [14] (./main.axp) (./main.aux)
+[13]
+Underfull \vbox (badness 6592) has occurred while \output is active []
+
+ [14]
+[15]) (./main.bbl) [16] (./main.axp) (./main.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -1205,10 +1205,10 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: B2BE2354275DE5B3516A47B97F3AD121;217.
  ) 
 Here is how much of TeX's memory you used:
- 28847 strings out of 478994
- 504891 string characters out of 5858185
- 871431 words of memory out of 5000000
- 45514 multiletter control sequences out of 15000+600000
+ 28838 strings out of 478994
+ 504913 string characters out of 5858185
+ 850713 words of memory out of 5000000
+ 45528 multiletter control sequences out of 15000+600000
  418458 words of font info for 84 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  133i,28n,133p,818b,1635s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1241,10 +1241,10 @@ ype1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2021/texmf-dist/fonts/ty
 pe1/public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2021/texmf-dist/fonts/type
 1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2021/texmf-dist/fonts/
 type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (14 pages, 366853 bytes).
+Output written on main.pdf (16 pages, 374318 bytes).
 PDF statistics:
- 497 PDF objects out of 1000 (max. 8388607)
- 447 compressed objects within 5 object streams
- 263 named destinations out of 1000 (max. 500000)
+ 473 PDF objects out of 1000 (max. 8388607)
+ 421 compressed objects within 5 object streams
+ 237 named destinations out of 1000 (max. 500000)
  21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

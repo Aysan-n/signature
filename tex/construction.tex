@@ -18,7 +18,8 @@ To construct a signature $\Sig[\ID,\Hash] \coloneqq (\SigGen, \SigSgn,
             \item $\pcreturn (\sk,\pk)$
             \end{nicodemus}
             
-              \underline{$\SigVer(\pk,\sigma,\m):$}
+            
+             \underline{$\SigVer(\pk,\sigma,\m):$}
             \begin{nicodemus}
             	\item \pcparse $\sigma = (\com_0,\c_0,\s_0, \com_1, \c_1,\s_1)$
             	\item \pcif $\c_0\oplus \c_1 \neq \Hash(\pk,\com_0,\com_1) $
@@ -62,8 +63,8 @@ To construct a signature $\Sig[\ID,\Hash] \coloneqq (\SigGen, \SigSgn,
     \centering
     \nicoresetlinenr
     \resizebox{\textwidth}{!}{\fbox{
-        \begin{minipage}[t]{0.8\textwidth}
-            \underline{$\G_0-\G_3$}
+        \begin{minipage}[t]{1\textwidth}
+            \underline{$\G_0-\G_4$}
             \begin{nicodemus}
             \item $b \sample \{0,1\}$
             \hfill\comment{$\G_2-\G_3 $}
@@ -81,7 +82,13 @@ To construct a signature $\Sig[\ID,\Hash] \coloneqq (\SigGen, \SigSgn,
 		\item \quad $ k_i = \Hash(\pk,\com_{0,i},\com_{1,i}) $
   		\item \quad $ e_i \sample \ChSet$
 		\item \quad $ \c_{0,i} = k_i \oplus e_i $
+		\hfill\comment{$\G_0-\G_3 $}
 		\item \quad $\c_{1,i} = e_i$  
+		\hfill\comment{$\G_0-\G_3 $}
+		\item \quad $\c_{b,i} = e_i$  
+		\hfill\comment{$\G_4$}
+		\item \quad $ \c_{1-b,i} = k_i \oplus e_i $
+		\hfill\comment{$\G_4$}
 		\item \quad $\s_{0,i} \sample\IDP_2(\sk_0,\st_{0,i},\c_{0,i})$
 		\item \quad $ \s_{1,i} \sample\IDP_2(\sk_1,\st_{1,i},\c_{1,i})$
 		\item \quad $\sigma_i \coloneqq (\com_{0,i},\c_{0,i},\s_{0,i}, \com_{1,i}, \c_{1,i},\s_{1,i})$
@@ -109,50 +116,14 @@ To construct a signature $\Sig[\ID,\Hash] \coloneqq (\SigGen, \SigSgn,
 
             \end{nicodemus}
         \end{minipage}
-                       \begin{minipage}[t]{0.8\textwidth}
-            \underline{$\G_4$}
-            \begin{nicodemus}
-            \item $b \sample \{0,1\}$
-            \item $\BAD_2 \leftarrow \true$
-
-            \item $(\pk_0,\sk_0)\sample\IDGen$
-            \item $(\pk_1,\sk_1)\sample\IDGen$
-            \item $pk \coloneqq (\pk_0,\pk_1)$
-            \item $\sk \coloneqq (\sk_0, \sk_1)$
-            \item \pcfor $i \in [q]$
-                \item \quad $ \m_i \sample \mathsf{M}$
-            	\item	\quad $(\com_{0,i},\st_{0,i})\sample\IDP_1(\sk_0,\m_i)$
-		\item \quad $(\com_{1,i},\st_{1,i})\sample\IDP_1(\sk_1,\m_i)$ 
-		\item \quad $ k_i = \Hash(\pk,\com_{0,i},\com_{1,i}) $
-  		\item \quad $ e_i \sample \ChSet$
-		\item \quad $\c_{b,i} = e_i$  
-		\item \quad $ \c_{1-b,i} = k_i \oplus e_i $
-		\item \quad $\s_{0,i} \sample\IDP_2(\sk_0,\st_{0,i},\c_{0,i})$
-		\item \quad $ \s_{1,i} \sample\IDP_2(\sk_1,\st_{1,i},\c_{1,i})$
-		\item \quad $\sigma_i \coloneqq (\com_{0,i},\c_{0,i},\s_{0,i}, \com_{1,i}, \c_{1,i},\s_{1,i})$
-                \item \quad $\Q \leftarrow \Q \cup (m_i,\sigma_i) $
-                \item $(\m*, \sigma^*)\gets\adv(\pk,\Q)$
-                \item \pcparse $\sigma^* = (\com_0^*,\c_0^*,\s_0^*, \com_1^*, \c_1^*,\s_1^*)$
-                \item \pcif $\IDAltV(\pk_0,\com^*_0,\c^*_0,\s^*_0) = 0 \land \IDAltV(\pk_0,\com^*_0,\c^*_0,\s^*_0) = 0$
-                \item \pcthen $\BAD_1 \leftarrow \true;\abort$
-                 \item \pcif $\IDAltV(\pk_b,\com^*_b,\c^*_b,\s^*_b) = 0$
-                 \item \pcthen $\BAD_2 \leftarrow \true;$
-                 \item \quad $\abort$
-            	\item \pcif $\c_0^*+\c_1^* \neq \Hash(\pk,\com^*_0,\com^*_1) $
-		\item \quad \pcthen \pcreturn $0$
-		\item \pcif $\IDV(\pk_0,\com_0,\c_0,\s_0) = 0 \lor \IDV(\pk_1,\com_1,\c_1,\s_1) =0$
-		\item \quad \pcthen \pcreturn $0$
-		 \item $\pcif m^* \notin \{m_1,..,m_q\} $
-		 \item \quad \pcthen \pcreturn $0$
-		\item \pcelse \pcreturn $1$
-                
-
-            \end{nicodemus}
-        \end{minipage}
+                      
     }}
     \caption{}
     \label{fig:x-soundess}
 \end{figure}
+\aysan{Write what we do in this section.}
+
+
 We say the signature  $\sigma = (\com_{0},\c_{0},\s_{0}, \com_{1}, \c_{1},\s_{1})$ is
 partially valid if $\IDAltV(\pk_0,\com_0,\c_0,\s_0) =1$ or $\IDAltV(\pk_1,\com_1,\c_1,\s_1) = 1$
 not partially valid if 
